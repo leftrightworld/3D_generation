@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物理仿真场景库 — 104 个经典力学场景</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f5f3f8;
+    color: #2d2640;
+    line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(135deg, #5a4a7a 0%, #3d2d5a 100%);
+    color: #fff;
+    padding: 32px 40px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  }
+  header h1 { font-size: 1.8rem; font-weight: 600; }
+  header p { margin-top: 6px; opacity: 0.8; font-size: 0.95rem; }
+
+  .controls {
+    padding: 16px 40px;
+    background: #ede9f4;
+    border-bottom: 1px solid #d4cce4;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .controls input {
+    padding: 8px 14px;
+    border: 1px solid #c0b4d8;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    width: 280px;
+    background: #fff;
+    color: #2d2640;
+  }
+  .controls input:focus { outline: 2px solid #7a5fa8; }
+  .count { font-size: 0.85rem; color: #6b5c8a; }
+
+  .table-wrap {
+    padding: 24px 40px;
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 8px rgba(90,74,122,0.10);
+  }
+  thead {
+    background: #5a4a7a;
+    color: #fff;
+  }
+  thead th {
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  th.th-num  { width: 48px; text-align: center; }
+  th.th-name { width: 220px; }
+  th.th-desc { width: auto; }
+  th.th-cat  { width: 90px; }
+  th.th-dur  { width: 56px; text-align: center; }
+  th.th-vid  { width: 300px; text-align: center; }
+
+  tbody tr {
+    border-bottom: 1px solid #ede9f4;
+    transition: background 0.15s;
+  }
+  tbody tr:hover { background: #f9f7fc; }
+  tbody tr:last-child { border-bottom: none; }
+
+  td { padding: 12px 16px; vertical-align: middle; font-size: 0.88rem; }
+  td.td-num { text-align: center; color: #9888b8; font-size: 0.8rem; font-weight: 600; }
+  td.td-name {
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 0.80rem;
+    color: #4a3870;
+    word-break: break-all;
+  }
+  td.td-desc { color: #3d2d5a; }
+  td.td-cat { }
+  td.td-dur { text-align: center; color: #7a6aa0; font-size: 0.82rem; }
+  td.td-vid { padding: 8px 16px; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .cat-pendulum  { background: #e8e0f8; color: #5a3a8a; }
+  .cat-collision { background: #fde8e8; color: #8a3a3a; }
+  .cat-rotation  { background: #e8f4fd; color: #2a5a8a; }
+  .cat-wave      { background: #e8fdf0; color: #2a7a4a; }
+  .cat-chain     { background: #fdf4e8; color: #8a5a2a; }
+  .cat-mechanism { background: #f0e8fd; color: #5a2a8a; }
+  .cat-friction  { background: #fdeee8; color: #8a4a2a; }
+  .cat-other     { background: #eef0f0; color: #4a5a5a; }
+
+  video {
+    width: 272px;
+    height: 153px;
+    border-radius: 6px;
+    background: #1a0f2e;
+    display: block;
+    cursor: pointer;
+  }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 900px) {
+    .table-wrap { padding: 16px; }
+    .controls { padding: 12px 16px; }
+    header { padding: 20px 16px; }
+    video { width: 200px; height: 113px; }
+    th.th-vid { width: 220px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>物理仿真场景库</h1>
+  <p>104 个经典力学场景 · MuJoCo 渲染 · 1920×1080 @30fps</p>
+</header>
+
+<div class="controls">
+  <input type="text" id="search" placeholder="搜索场景名称或描述…" oninput="filterTable()">
+  <span class="count" id="count">共 104 个场景</span>
+</div>
+
+<div class="table-wrap">
+<table id="scene-table">
+  <thead>
+    <tr>
+      <th class="th-num">#</th>
+      <th class="th-name">场景名称</th>
+      <th class="th-desc">场景描述</th>
+      <th class="th-cat">分类</th>
+      <th class="th-dur">时长</th>
+      <th class="th-vid">视频</th>
+    </tr>
+  </thead>
+  <tbody>
+
+<tr>
+  <td class="td-num">1</td>
+  <td class="td-name">bowling</td>
+  <td class="td-desc">保龄球碰撞摩擦：球沿木地板滑行后撞击球瓶，展示碰撞与摩擦</td>
+  <td><span class="badge cat-collision">碰撞</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/bowling.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">2</td>
+  <td class="td-name">marble</td>
+  <td class="td-desc">弹珠斜坡：小球沿坡道滚下，演示重力势能转化为滚动动能</td>
+  <td><span class="badge cat-rotation">滚动</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/marble.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">3</td>
+  <td class="td-name">pendulum</td>
+  <td class="td-desc">单摆：标准单摆振荡，展示等时性与能量守恒</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/pendulum.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">4</td>
+  <td class="td-name">projectile_jenga</td>
+  <td class="td-desc">抛体击塔：子弹水平飞出，命中积木塔，展示抛体运动与结构稳定性</td>
+  <td><span class="badge cat-other">其他</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/projectile_jenga.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">5</td>
+  <td class="td-name">newton_cradle</td>
+  <td class="td-desc">牛顿摆：弹性碰撞动量传递，端球起落，中间球静止不动</td>
+  <td><span class="badge cat-collision">碰撞</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/newton_cradle.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">6</td>
+  <td class="td-name">double_pendulum</td>
+  <td class="td-desc">双摆混沌：两段摆臂连接，轻微初条件差异导致轨迹指数发散</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/double_pendulum.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">7</td>
+  <td class="td-name">incline_friction</td>
+  <td class="td-desc">斜面摩擦对比：高/低摩擦系数两块分别下滑，直观对比 μ 的影响</td>
+  <td><span class="badge cat-friction">摩擦</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/incline_friction.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">8</td>
+  <td class="td-name">dominoes</td>
+  <td class="td-desc">多米诺链式倒塌：骨牌依次推倒，展示能量逐牌传递</td>
+  <td><span class="badge cat-other">其他</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/dominoes.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">9</td>
+  <td class="td-name">spring_mass</td>
+  <td class="td-desc">弹簧振子（SHM）：水平弹簧-质块系统做简谐振动</td>
+  <td><span class="badge cat-pendulum">振动</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/spring_mass.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">10</td>
+  <td class="td-name">atwood</td>
+  <td class="td-desc">阿特伍德机：不等质量通过轻绳悬于定滑轮，展示匀加速运动</td>
+  <td><span class="badge cat-mechanism">机构</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/atwood.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">11</td>
+  <td class="td-name">spinning_top</td>
+  <td class="td-desc">陀螺进动与章动：高速旋转的陀螺绕竖轴缓慢进动并上下章动</td>
+  <td><span class="badge cat-rotation">旋转</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/spinning_top.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">12</td>
+  <td class="td-name">conical_pendulum</td>
+  <td class="td-desc">锥摆：摆锤做水平匀速圆周运动，摆线扫出圆锥面</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/conical_pendulum.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">13</td>
+  <td class="td-name">loop_the_loop</td>
+  <td class="td-desc">竖直圆环轨道：小球带初速入环，在顶端保持离心力大于重力</td>
+  <td><span class="badge cat-rotation">旋转</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/loop_the_loop.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">14</td>
+  <td class="td-name">rolling_race</td>
+  <td class="td-desc">滚动竞赛：不同转动惯量比 I/MR² 的圆柱和球同时下坡，球胜出</td>
+  <td><span class="badge cat-rotation">滚动</span></td>
+  <td class="td-vid"><video src="scenes/rolling_race.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">15</td>
+  <td class="td-name">pendulum_waves</td>
+  <td class="td-desc">摆波图样：一排等间距、长度递增的摆同时释放，形成周期性波浪图案</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/pendulum_waves.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">16</td>
+  <td class="td-name">coupled_pendulums</td>
+  <td class="td-desc">耦合摆拍频：两摆通过弱弹簧连接，能量周期性在两摆之间转移</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/coupled_pendulums.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">17</td>
+  <td class="td-name">block_overhang</td>
+  <td class="td-desc">积木悬挑：叠放积木按调和级数 Σ L/2k 最大化悬挑距离</td>
+  <td><span class="badge cat-other">平衡</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/block_overhang.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">18</td>
+  <td class="td-name">galileo_dropballs</td>
+  <td class="td-desc">伽利略自由落体：不同质量的球同时释放，等时落地</td>
+  <td><span class="badge cat-other">自由落体</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/galileo_dropballs.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">19</td>
+  <td class="td-name">elastic_collision</td>
+  <td class="td-desc">弹性碰撞：等质量球正碰后速度完全交换，原静止球飞出</td>
+  <td><span class="badge cat-collision">碰撞</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/elastic_collision.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">20</td>
+  <td class="td-name">brachistochrone</td>
+  <td class="td-desc">最速降线：摆线轨道 vs 直线轨道，摆线端点同时抵达底部</td>
+  <td><span class="badge cat-other">变分</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/brachistochrone.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">21</td>
+  <td class="td-name">maxwell_wheel</td>
+  <td class="td-desc">麦克斯韦轮：线轴绕线下落再升起，展示平动与转动能量相互转化</td>
+  <td><span class="badge cat-rotation">旋转</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/maxwell_wheel.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">22</td>
+  <td class="td-name">beam_buckling</td>
+  <td class="td-desc">欧拉屈曲：竖直细柱顶端施压，超过临界载荷后发生侧向屈曲</td>
+  <td><span class="badge cat-other">结构</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/beam_buckling.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">23</td>
+  <td class="td-name">rotating_fluid</td>
+  <td class="td-desc">离心抛物面：圆桶旋转，颗粒近似"液面"呈抛物面，中央出现干涸</td>
+  <td><span class="badge cat-other">离心</span></td>
+  <td class="td-dur">—</td>
+  <td class="td-vid"><video src="scenes/rotating_fluid.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">24</td>
+  <td class="td-name">bifilar_pendulum</td>
+  <td class="td-desc">双线悬摆：两根悬线连接水平板，板做扭转振动</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">6s</td>
+  <td class="td-vid"><video src="scenes/bifilar_pendulum.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">25</td>
+  <td class="td-name">wilberforce_pendulum</td>
+  <td class="td-desc">威尔伯福斯摆：弹簧伸缩与扭转模式周期性能量交换</td>
+  <td><span class="badge cat-pendulum">振动</span></td>
+  <td class="td-dur">18s</td>
+  <td class="td-vid"><video src="scenes/wilberforce_pendulum.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">26</td>
+  <td class="td-name">damped_pendulum_decay</td>
+  <td class="td-desc">阻尼摆衰减：粘性阻力使摆幅指数衰减至静止</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">8s</td>
+  <td class="td-vid"><video src="scenes/damped_pendulum_decay.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">27</td>
+  <td class="td-name">yoyo_with_reversal</td>
+  <td class="td-desc">悠悠球反转：绕线释放后下落，线绕完后转向上升，反复悠悠</td>
+  <td><span class="badge cat-rotation">旋转</span></td>
+  <td class="td-dur">9s</td>
+  <td class="td-vid"><video src="scenes/yoyo_with_reversal.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">28</td>
+  <td class="td-name">coin_spiral</td>
+  <td class="td-desc">硬币进动倒下：硬币侧立旋转，进动频率加快至落地</td>
+  <td><span class="badge cat-rotation">旋转</span></td>
+  <td class="td-dur">7s</td>
+  <td class="td-vid"><video src="scenes/coin_spiral.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">29</td>
+  <td class="td-name">inelastic_collision</td>
+  <td class="td-desc">完全非弹性碰撞：两球碰后粘连共同运动，动能有损耗</td>
+  <td><span class="badge cat-collision">碰撞</span></td>
+  <td class="td-dur">3.5s</td>
+  <td class="td-vid"><video src="scenes/inelastic_collision.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">30</td>
+  <td class="td-name">coefficient_of_restitution</td>
+  <td class="td-desc">恢复系数：球从固定高度落下，弹跳高度按 e² 几何衰减</td>
+  <td><span class="badge cat-collision">碰撞</span></td>
+  <td class="td-dur">14s</td>
+  <td class="td-vid"><video src="scenes/coefficient_of_restitution.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">31</td>
+  <td class="td-name">com_pair_track</td>
+  <td class="td-desc">质心守恒：两球通过弹簧弹开，质心始终静止不动</td>
+  <td><span class="badge cat-collision">动量</span></td>
+  <td class="td-dur">5s</td>
+  <td class="td-vid"><video src="scenes/com_pair_track.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">32</td>
+  <td class="td-name">beats</td>
+  <td class="td-desc">拍频：两个频率相近的振子叠加，振幅出现周期性包络</td>
+  <td><span class="badge cat-wave">波</span></td>
+  <td class="td-dur">18s</td>
+  <td class="td-vid"><video src="scenes/beats.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">33</td>
+  <td class="td-name">wave_reflection_fixed</td>
+  <td class="td-desc">固定端反射：脉冲到达固定端后反相返回</td>
+  <td><span class="badge cat-wave">波</span></td>
+  <td class="td-dur">5s</td>
+  <td class="td-vid"><video src="scenes/wave_reflection_fixed.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">34</td>
+  <td class="td-name">capstan_effect</td>
+  <td class="td-desc">卡普斯坦效应：绳绕圆柱多圈，摩擦力指数放大承载力</td>
+  <td><span class="badge cat-friction">摩擦</span></td>
+  <td class="td-dur">7s</td>
+  <td class="td-vid"><video src="scenes/capstan_effect.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">35</td>
+  <td class="td-name">falling_chain_classical</td>
+  <td class="td-desc">链条滑落加速：链条一端悬出桌缘，重力不断拉长悬挂段使其加速滑落</td>
+  <td><span class="badge cat-chain">链</span></td>
+  <td class="td-dur">3.5s</td>
+  <td class="td-vid"><video src="scenes/falling_chain_classical.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">36</td>
+  <td class="td-name">bead_on_helix</td>
+  <td class="td-desc">螺旋轨道下滑：珠子沿螺旋形导轨匀速下落，螺距决定速度</td>
+  <td><span class="badge cat-other">约束运动</span></td>
+  <td class="td-dur">7.5s</td>
+  <td class="td-vid"><video src="scenes/bead_on_helix.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">37</td>
+  <td class="td-name">trifilar_pendulum</td>
+  <td class="td-desc">三线悬盘：三根等长细线连接圆盘，盘做扭转振动，可测转动惯量</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/trifilar_pendulum.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">38</td>
+  <td class="td-name">pendulum_with_air_drag</td>
+  <td class="td-desc">空气阻力摆：二次阻尼使摆幅比粘性阻尼衰减更快，轨迹不对称</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">8s</td>
+  <td class="td-vid"><video src="scenes/pendulum_with_air_drag.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">39</td>
+  <td class="td-name">anharmonic_pendulum_large_swing</td>
+  <td class="td-desc">大角度摆：初始角 >90°，周期比小角 SHM 明显偏长，轨迹非正弦</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">8s</td>
+  <td class="td-vid"><video src="scenes/anharmonic_pendulum_large_swing.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">40</td>
+  <td class="td-name">rolling_cone</td>
+  <td class="td-desc">圆锥滚动：圆锥以侧面着地绕顶点做圆周滚动</td>
+  <td><span class="badge cat-rotation">滚动</span></td>
+  <td class="td-dur">5s</td>
+  <td class="td-vid"><video src="scenes/rolling_cone.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">41</td>
+  <td class="td-name">gyroscope_on_string</td>
+  <td class="td-desc">绳悬陀螺进动：高速陀螺被细绳吊住一端，在重力矩作用下水平进动</td>
+  <td><span class="badge cat-rotation">陀螺</span></td>
+  <td class="td-dur">5s</td>
+  <td class="td-vid"><video src="scenes/gyroscope_on_string.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">42</td>
+  <td class="td-name">falling_chimney</td>
+  <td class="td-desc">倒塌烟囱：顶部受扰的高刚性柱倒塌，展示各段加速度关系</td>
+  <td><span class="badge cat-other">刚体</span></td>
+  <td class="td-dur">1.5s</td>
+  <td class="td-vid"><video src="scenes/falling_chimney.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">43</td>
+  <td class="td-name">ballistic_pendulum</td>
+  <td class="td-desc">弹道摆：子弹嵌入悬摆，由摆幅反算子弹初速</td>
+  <td><span class="badge cat-collision">碰撞</span></td>
+  <td class="td-dur">3s</td>
+  <td class="td-vid"><video src="scenes/ballistic_pendulum.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">44</td>
+  <td class="td-name">glancing_2d_collision</td>
+  <td class="td-desc">二维斜碰：两球弹性斜碰，动量和能量守恒决定散射角</td>
+  <td><span class="badge cat-collision">碰撞</span></td>
+  <td class="td-dur">2s</td>
+  <td class="td-vid"><video src="scenes/glancing_2d_collision.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">45</td>
+  <td class="td-name">cannon_recoil</td>
+  <td class="td-desc">炮筒后坐：炮弹射出，炮筒反向后退，演示牛顿第三定律</td>
+  <td><span class="badge cat-collision">动量</span></td>
+  <td class="td-dur">2.5s</td>
+  <td class="td-vid"><video src="scenes/cannon_recoil.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">46</td>
+  <td class="td-name">normal_modes_2mass</td>
+  <td class="td-desc">两质量弹簧正规模式：同相与反相振动两种本征模频率对比</td>
+  <td><span class="badge cat-wave">振动</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/normal_modes_2mass.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">47</td>
+  <td class="td-name">wave_reflection_free</td>
+  <td class="td-desc">自由端反射：脉冲到达自由端后同相返回</td>
+  <td><span class="badge cat-wave">波</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/wave_reflection_free.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">48</td>
+  <td class="td-name">stick_slip</td>
+  <td class="td-desc">粘滑振荡：静/动摩擦切换产生周期性锯齿状运动</td>
+  <td><span class="badge cat-friction">摩擦</span></td>
+  <td class="td-dur">6s</td>
+  <td class="td-vid"><video src="scenes/stick_slip.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">49</td>
+  <td class="td-name">dzhanibekov_effect</td>
+  <td class="td-desc">丹尼别科夫效应：中间轴不稳定，T形柄在太空中自发翻转</td>
+  <td><span class="badge cat-rotation">旋转</span></td>
+  <td class="td-dur">5s</td>
+  <td class="td-vid"><video src="scenes/dzhanibekov_effect.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">50</td>
+  <td class="td-name">sliding_chain_off_table</td>
+  <td class="td-desc">链条悬挂加速滑落：链端悬出桌面，全链加速滑落</td>
+  <td><span class="badge cat-chain">链</span></td>
+  <td class="td-dur">1.5s</td>
+  <td class="td-vid"><video src="scenes/sliding_chain_off_table.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">51</td>
+  <td class="td-name">bead_on_cycloid_track_isochrony</td>
+  <td class="td-desc">摆线等时性：三颗珠子从不同位置同时释放，同一时刻到达最低点</td>
+  <td><span class="badge cat-other">变分</span></td>
+  <td class="td-dur">1.8s</td>
+  <td class="td-vid"><video src="scenes/bead_on_cycloid_track_isochrony.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">52</td>
+  <td class="td-name">geneva_drive</td>
+  <td class="td-desc">日内瓦间歇机构：主动轮连续转动，带动星形轮每次间歇步进 90°</td>
+  <td><span class="badge cat-mechanism">机构</span></td>
+  <td class="td-dur">5s</td>
+  <td class="td-vid"><video src="scenes/geneva_drive.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">53</td>
+  <td class="td-name">balance_beam_lever</td>
+  <td class="td-desc">杠杆转矩：不等重物在支点两侧平衡，力矩 F×d 相等时不动</td>
+  <td><span class="badge cat-mechanism">机构</span></td>
+  <td class="td-dur">3s</td>
+  <td class="td-vid"><video src="scenes/balance_beam_lever.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">54</td>
+  <td class="td-name">compound_pendulum_shapes</td>
+  <td class="td-desc">复摆周期与形状：不同几何形状的刚体摆，周期取决于质心到轴距和转动惯量</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">6s</td>
+  <td class="td-vid"><video src="scenes/compound_pendulum_shapes.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">55</td>
+  <td class="td-name">triple_pendulum</td>
+  <td class="td-desc">三重摆混沌：三节摆臂，系统极度敏感于初始条件，运动迅速混乱</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">8s</td>
+  <td class="td-vid"><video src="scenes/triple_pendulum.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">56</td>
+  <td class="td-name">spherical_pendulum_2d</td>
+  <td class="td-desc">球面摆轨迹：摆锤在球面上运动，轨迹形成玫瑰线图样</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">14s</td>
+  <td class="td-vid"><video src="scenes/spherical_pendulum_2d.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">57</td>
+  <td class="td-name">spool_with_string</td>
+  <td class="td-desc">线轴拉绳方向：绳的拉力方向决定线轴是滚向还是滚离，临界角效应</td>
+  <td><span class="badge cat-rotation">滚动</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/spool_with_string.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">58</td>
+  <td class="td-name">mass_through_hole</td>
+  <td class="td-desc">穿孔绳角动量守恒：桌面上的质块通过绳穿孔绕圆，拉短绳后半径减小、转速加快</td>
+  <td><span class="badge cat-rotation">角动量</span></td>
+  <td class="td-dur">5s</td>
+  <td class="td-vid"><video src="scenes/mass_through_hole.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">59</td>
+  <td class="td-name">reuleaux_triangle_rolling</td>
+  <td class="td-desc">鲁洛三角滚动：等宽三角形在两平行板间滚动，中心高度略有波动但不离地</td>
+  <td><span class="badge cat-rotation">滚动</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/reuleaux_triangle_rolling.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">60</td>
+  <td class="td-name">basketball_tennis_drop</td>
+  <td class="td-desc">叠球落地弹跳：网球叠放在篮球上方同时落下，弹起时网球获得更大速度</td>
+  <td><span class="badge cat-collision">碰撞</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/basketball_tennis_drop.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">61</td>
+  <td class="td-name">line_collision_chain</td>
+  <td class="td-desc">无绳牛顿摆：一排接触球，端球碰撞，动量沿刚性接触链传递</td>
+  <td><span class="badge cat-collision">碰撞</span></td>
+  <td class="td-dur">2.5s</td>
+  <td class="td-vid"><video src="scenes/line_collision_chain.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">62</td>
+  <td class="td-name">two_pendulums_collide</td>
+  <td class="td-desc">两摆底部碰撞：两摆相向摆动，底部球弹性碰撞后各自反弹</td>
+  <td><span class="badge cat-collision">碰撞</span></td>
+  <td class="td-dur">3s</td>
+  <td class="td-vid"><video src="scenes/two_pendulums_collide.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">63</td>
+  <td class="td-name">vertical_spring_mass</td>
+  <td class="td-desc">竖直弹簧振子：质块挂在竖直弹簧上做 SHM，展示平衡位置偏移</td>
+  <td><span class="badge cat-pendulum">振动</span></td>
+  <td class="td-dur">5s</td>
+  <td class="td-vid"><video src="scenes/vertical_spring_mass.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">64</td>
+  <td class="td-name">wave_on_heavy_rope</td>
+  <td class="td-desc">重绳脉冲传播：单次脉冲在重绳中传播，越靠上张力大，传播越快</td>
+  <td><span class="badge cat-wave">波</span></td>
+  <td class="td-dur">3s</td>
+  <td class="td-vid"><video src="scenes/wave_on_heavy_rope.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">65</td>
+  <td class="td-name">tipping_vs_sliding</td>
+  <td class="td-desc">倾覆与滑动竞争：不同高宽比的块，高的倾覆，矮的滑动</td>
+  <td><span class="badge cat-friction">摩擦</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/tipping_vs_sliding.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">66</td>
+  <td class="td-name">rattleback</td>
+  <td class="td-desc">凯尔特石反转：非对称椭球顺转后自发减速，反向加速旋转</td>
+  <td><span class="badge cat-rotation">旋转</span></td>
+  <td class="td-dur">8s</td>
+  <td class="td-vid"><video src="scenes/rattleback.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">67</td>
+  <td class="td-name">hanging_chain_catenary</td>
+  <td class="td-desc">悬链线成形：自由链从直线状态释放，在重力下下垂成悬链线形</td>
+  <td><span class="badge cat-chain">链</span></td>
+  <td class="td-dur">6s</td>
+  <td class="td-vid"><video src="scenes/hanging_chain_catenary.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">68</td>
+  <td class="td-name">bead_on_parabolic_wire</td>
+  <td class="td-desc">抛物线导轨 SHM：珠子沿抛物线导轨左右运动，做近似简谐振动</td>
+  <td><span class="badge cat-other">约束运动</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/bead_on_parabolic_wire.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">69</td>
+  <td class="td-name">domino_branching</td>
+  <td class="td-desc">Y 形多米诺级联：主链触发后分叉，两路同时传播</td>
+  <td><span class="badge cat-other">其他</span></td>
+  <td class="td-dur">5s</td>
+  <td class="td-vid"><video src="scenes/domino_branching.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">70</td>
+  <td class="td-name">pyramid_keystone_removal</td>
+  <td class="td-desc">楔石移除：抽去拱形楔石，整体结构坍塌</td>
+  <td><span class="badge cat-other">结构</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/pyramid_keystone_removal.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">71</td>
+  <td class="td-name">cycloidal_pendulum_huygens</td>
+  <td class="td-desc">惠更斯摆线摆：弦沿摆线导槽释放，任意幅度等时振荡</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/cycloidal_pendulum_huygens.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">72</td>
+  <td class="td-name">rolling_chain</td>
+  <td class="td-desc">履带链条：闭合链条在两轴间滚动，展示坦克履带运动方式</td>
+  <td><span class="badge cat-chain">链</span></td>
+  <td class="td-dur">4.5s</td>
+  <td class="td-vid"><video src="scenes/rolling_chain.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">73</td>
+  <td class="td-name">centrifugal_governor</td>
+  <td class="td-desc">瓦特离心调速器：转速越高，飞球张开越大，通过连杆抑制过速</td>
+  <td><span class="badge cat-mechanism">机构</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/centrifugal_governor.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">74</td>
+  <td class="td-name">pulley_with_inertia</td>
+  <td class="td-desc">有质量滑轮 Atwood 机：滑轮转动惯量影响系统加速度</td>
+  <td><span class="badge cat-mechanism">机构</span></td>
+  <td class="td-dur">3s</td>
+  <td class="td-vid"><video src="scenes/pulley_with_inertia.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">75</td>
+  <td class="td-name">n_body_1d_collisions</td>
+  <td class="td-desc">7球一维弹性链：多球连续弹性碰撞，动量逐球传递到端部</td>
+  <td><span class="badge cat-collision">碰撞</span></td>
+  <td class="td-dur">2s</td>
+  <td class="td-vid"><video src="scenes/n_body_1d_collisions.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">76</td>
+  <td class="td-name">block_on_accelerating_wedge</td>
+  <td class="td-desc">加速楔块上的滑块：楔块水平加速，块与楔之间出现相对运动</td>
+  <td><span class="badge cat-friction">摩擦</span></td>
+  <td class="td-dur">1.5s</td>
+  <td class="td-vid"><video src="scenes/block_on_accelerating_wedge.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">77</td>
+  <td class="td-name">pendulum_with_lateral_spring</td>
+  <td class="td-desc">侧向弹簧摆：侧向弹簧将能量在摆动与弹簧振动之间周期交换</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">12s</td>
+  <td class="td-vid"><video src="scenes/pendulum_with_lateral_spring.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">78</td>
+  <td class="td-name">hanging_slinky_drop</td>
+  <td class="td-desc">弹簧底端悬挂释放：顶端释放，底端静止不动直到顶端塌落到达</td>
+  <td><span class="badge cat-chain">弹簧</span></td>
+  <td class="td-dur">1.5s</td>
+  <td class="td-vid"><video src="scenes/hanging_slinky_drop.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">79</td>
+  <td class="td-name">standing_wave_on_string</td>
+  <td class="td-desc">弦驻波基频：两端固定弦振动形成半波长驻波，波节不动</td>
+  <td><span class="badge cat-wave">波</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/standing_wave_on_string.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">80</td>
+  <td class="td-name">belt_friction</td>
+  <td class="td-desc">皮带传动：皮带绕两轮传递扭矩，松边与紧边张力差决定传动力</td>
+  <td><span class="badge cat-friction">摩擦</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/belt_friction.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">81</td>
+  <td class="td-name">block_on_block_static_friction</td>
+  <td class="td-desc">叠块摩擦：底块被拉动，静摩擦力带动上块，超过最大静摩擦后上块打滑</td>
+  <td><span class="badge cat-friction">摩擦</span></td>
+  <td class="td-dur">2s</td>
+  <td class="td-vid"><video src="scenes/block_on_block_static_friction.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">82</td>
+  <td class="td-name">tumbling_book</td>
+  <td class="td-desc">书本中间轴翻转（丹尼别科夫效应书本版）：绕中间主轴旋转后自发翻转</td>
+  <td><span class="badge cat-rotation">旋转</span></td>
+  <td class="td-dur">5s</td>
+  <td class="td-vid"><video src="scenes/tumbling_book.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">83</td>
+  <td class="td-name">swinging_chain_pendulum</td>
+  <td class="td-desc">柔性链摆：链条悬挂摆动，末端甩出弧形，展示柔性体模态</td>
+  <td><span class="badge cat-chain">链</span></td>
+  <td class="td-dur">5s</td>
+  <td class="td-vid"><video src="scenes/swinging_chain_pendulum.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">84</td>
+  <td class="td-name">bead_in_rotating_ring</td>
+  <td class="td-desc">转环内珠：竖直旋转圆环中的珠子，高速时离心力使珠停在非底部平衡位</td>
+  <td><span class="badge cat-rotation">离心</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/bead_in_rotating_ring.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">85</td>
+  <td class="td-name">block_and_tackle</td>
+  <td class="td-desc">动滑轮组：两个滑轮组合，绳端力为载荷的一半，行程加倍</td>
+  <td><span class="badge cat-mechanism">机构</span></td>
+  <td class="td-dur">3s</td>
+  <td class="td-vid"><video src="scenes/block_and_tackle.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">86</td>
+  <td class="td-name">cantilever_load_curve</td>
+  <td class="td-desc">悬臂梁挠度：固定端梁在端部逐渐加载，展示挠度与载荷线性关系</td>
+  <td><span class="badge cat-other">结构</span></td>
+  <td class="td-dur">3s</td>
+  <td class="td-vid"><video src="scenes/cantilever_load_curve.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">87</td>
+  <td class="td-name">symmetry_breaking_ball_on_dome</td>
+  <td class="td-desc">半球顶不稳定平衡：球在球形穹顶顶端，微扰后对称性破缺并滑落</td>
+  <td><span class="badge cat-other">平衡</span></td>
+  <td class="td-dur">2s</td>
+  <td class="td-vid"><video src="scenes/symmetry_breaking_ball_on_dome.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">88</td>
+  <td class="td-name">galileo_pendulum_peg</td>
+  <td class="td-desc">伽利略钉子摆：摆绳中途被钉子截断，摆锤继续上升至等高处，验证能量守恒</td>
+  <td><span class="badge cat-pendulum">摆</span></td>
+  <td class="td-dur">3s</td>
+  <td class="td-vid"><video src="scenes/galileo_pendulum_peg.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">89</td>
+  <td class="td-name">horizontal_vs_dropped_balls</td>
+  <td class="td-desc">平抛与自由落体等时：水平抛出与竖直落下的球同时着地</td>
+  <td><span class="badge cat-other">抛体</span></td>
+  <td class="td-dur">0.6s</td>
+  <td class="td-vid"><video src="scenes/horizontal_vs_dropped_balls.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">90</td>
+  <td class="td-name">chain_jet_classic</td>
+  <td class="td-desc">链条自喷射：堆在桌上的链条从孔中流出，形成向上喷射的弧形链柱</td>
+  <td><span class="badge cat-chain">链</span></td>
+  <td class="td-dur">3.5s</td>
+  <td class="td-vid"><video src="scenes/chain_jet_classic.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">91</td>
+  <td class="td-name">rolling_disc_inscribes_cycloid</td>
+  <td class="td-desc">圆盘滚动画摆线：圆盘边缘一点在滚动时描绘出标准摆线轨迹</td>
+  <td><span class="badge cat-rotation">滚动</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/rolling_disc_inscribes_cycloid.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">92</td>
+  <td class="td-name">bucket_of_water_overhead_swing</td>
+  <td class="td-desc">头顶甩水桶：水桶做竖直圆周运动，顶端离心力抵消重力，水不洒出</td>
+  <td><span class="badge cat-rotation">离心</span></td>
+  <td class="td-dur">3s</td>
+  <td class="td-vid"><video src="scenes/bucket_of_water_overhead_swing.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">93</td>
+  <td class="td-name">two_marbles_curved_track_collision</td>
+  <td class="td-desc">U型槽弹性碰撞：两弹珠沿弧形轨道滚来，底部弹性碰撞后各自上升至等高</td>
+  <td><span class="badge cat-collision">碰撞</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/two_marbles_curved_track_collision.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">94</td>
+  <td class="td-name">planetary_gear_train</td>
+  <td class="td-desc">行星齿轮：太阳轮、行星轮、齿圈的传动比和输出转速关系</td>
+  <td><span class="badge cat-mechanism">机构</span></td>
+  <td class="td-dur">3s</td>
+  <td class="td-vid"><video src="scenes/planetary_gear_train.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">95</td>
+  <td class="td-name">gear_train_2_gears</td>
+  <td class="td-desc">两齿轮传动：大小齿轮咬合，转速之比等于齿数之反比</td>
+  <td><span class="badge cat-mechanism">机构</span></td>
+  <td class="td-dur">3s</td>
+  <td class="td-vid"><video src="scenes/gear_train_2_gears.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">96</td>
+  <td class="td-name">four_bar_linkage</td>
+  <td class="td-desc">Grashof 四杆机构：主动曲柄连续旋转，输出连杆产生摇摆或旋转运动</td>
+  <td><span class="badge cat-mechanism">机构</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/four_bar_linkage.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">97</td>
+  <td class="td-name">ratchet_pawl</td>
+  <td class="td-desc">棘轮止逆：棘爪允许单向旋转，反向被锁死，展示机械整流原理</td>
+  <td><span class="badge cat-mechanism">机构</span></td>
+  <td class="td-dur">3s</td>
+  <td class="td-vid"><video src="scenes/ratchet_pawl.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">98</td>
+  <td class="td-name">chain_unspooling_from_pile</td>
+  <td class="td-desc">链堆自解链：链条从堆中被拉出，解开过程中端部加速</td>
+  <td><span class="badge cat-chain">链</span></td>
+  <td class="td-dur">3.5s</td>
+  <td class="td-vid"><video src="scenes/chain_unspooling_from_pile.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">99</td>
+  <td class="td-name">triple_block_friction_chain</td>
+  <td class="td-desc">三叠块摩擦链：三块叠放，底块被拉动，各层间摩擦力梯次传递</td>
+  <td><span class="badge cat-friction">摩擦</span></td>
+  <td class="td-dur">2.5s</td>
+  <td class="td-vid"><video src="scenes/triple_block_friction_chain.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">100</td>
+  <td class="td-name">chain_on_scale_falling</td>
+  <td class="td-desc">链条落秤：链条从高处落入秤盘，冲击力超过静态重力，秤盘示数偏高</td>
+  <td><span class="badge cat-chain">链</span></td>
+  <td class="td-dur">2s</td>
+  <td class="td-vid"><video src="scenes/chain_on_scale_falling.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">101</td>
+  <td class="td-name">two_bodies_on_incline_string</td>
+  <td class="td-desc">斜面绳约束双物体：两质块通过绳经斜面顶端滑轮连接，系统加速度取决于质量差</td>
+  <td><span class="badge cat-mechanism">机构</span></td>
+  <td class="td-dur">3s</td>
+  <td class="td-vid"><video src="scenes/two_bodies_on_incline_string.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">102</td>
+  <td class="td-name">double_atwood</td>
+  <td class="td-desc">嵌套 Atwood 机：一个滑轮组挂在另一个的重物上，系统加速度更复杂</td>
+  <td><span class="badge cat-mechanism">机构</span></td>
+  <td class="td-dur">3.5s</td>
+  <td class="td-vid"><video src="scenes/double_atwood.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">103</td>
+  <td class="td-name">galileo_inclined_plane_squared</td>
+  <td class="td-desc">伽利略斜面 d∝t²：斜面上的球位移与时间平方成正比，等间隔时刻位移递增</td>
+  <td><span class="badge cat-other">运动学</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/galileo_inclined_plane_squared.mp4" controls preload="none"></video></td>
+</tr>
+
+<tr>
+  <td class="td-num">104</td>
+  <td class="td-name">rolling_dumbbell</td>
+  <td class="td-desc">哑铃滚地翻转：哑铃以端部着地滚动，惯性引导其翻转姿态</td>
+  <td><span class="badge cat-rotation">滚动</span></td>
+  <td class="td-dur">4s</td>
+  <td class="td-vid"><video src="scenes/rolling_dumbbell.mp4" controls preload="none"></video></td>
+</tr>
+
+  </tbody>
+</table>
+</div>
+
+<script>
+function filterTable() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const rows = document.querySelectorAll('#scene-table tbody tr');
+  let visible = 0;
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    const show = !q || text.includes(q);
+    row.classList.toggle('hidden', !show);
+    if (show) visible++;
+  });
+  document.getElementById('count').textContent = `共 ${visible} 个场景`;
+}
+</script>
+
+</body>
+</html>
