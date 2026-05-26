@@ -1,0 +1,4753 @@
+{
+  "task_id": "G-1_object_trajectory_data-generator_00000004",
+  "generator": "G-1_object_trajectory_data-generator",
+  "timestamp": "2026-05-21T02:30:40.828456",
+  "parameters": {
+    "shape": "diamond",
+    "ball_color_rgb": [
+      120,
+      120,
+      95
+    ],
+    "ball_color_hex": "#78785f",
+    "start_pos": [
+      752,
+      735
+    ],
+    "end_pos": [
+      100,
+      299
+    ],
+    "ball_radius": 70,
+    "background_rgb": [
+      255,
+      255,
+      255
+    ],
+    "outline_rgb": [
+      0,
+      0,
+      0
+    ],
+    "dash_color_rgb": [
+      0,
+      0,
+      0
+    ],
+    "outline_width_px": 1,
+    "dash_width_px": 3,
+    "dash_length_px": 5,
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "video_fps": 16,
+    "hold_frames": 16,
+    "move_frames": 32,
+    "total_frames": 64,
+    "path_length_px": 784.346862,
+    "heading_rad": -2.552176,
+    "heading_deg": -146.228892
+  },
+  "param_hash": "7dddc41ad4242499",
+  "generation": {
+    "seed": 42,
+    "git": {
+      "commit": "",
+      "branch": "",
+      "repo": "",
+      "is_dirty": false
+    }
+  },
+  "schema_version": "vbvr-meta-v0",
+  "semantic_ground_truth": {
+    "task_type": "object_trajectory",
+    "motion_model": "linear_translation_shortest_path",
+    "shape": "diamond",
+    "start_pos_px": [
+      752,
+      735
+    ],
+    "end_pos_px": [
+      100,
+      299
+    ],
+    "path_length_px": 784.346862,
+    "heading_deg": -146.228892,
+    "objects": [
+      {
+        "symbol": "moving_shape",
+        "shape": "diamond",
+        "role": "agent",
+        "color_rgb": [
+          120,
+          120,
+          95
+        ],
+        "color_hex": "#78785f",
+        "radius_px": 70,
+        "initial_position_px": [
+          752,
+          735
+        ],
+        "final_position_px": [
+          100,
+          299
+        ]
+      },
+      {
+        "symbol": "dashed_target",
+        "shape": "diamond",
+        "role": "target_outline",
+        "color_rgb": [
+          0,
+          0,
+          0
+        ],
+        "radius_px": 70,
+        "initial_position_px": [
+          100,
+          299
+        ],
+        "final_position_px": [
+          100,
+          299
+        ]
+      }
+    ],
+    "rules_en": [
+      "There is exactly one solid coloured shape and one dashed target outline of the same shape in the scene.",
+      "The dashed target outline is static; only the solid shape moves.",
+      "The solid shape translates along the shortest straight-line path from its starting centre to the target centre.",
+      "The shape does not rotate, scale, or change colour during the motion.",
+      "At the final frame the solid shape and dashed target completely overlap."
+    ],
+    "task_summary_en": "Object trajectory: translate a single coloured shape (circle, square, triangle, or diamond) from its starting position to a dashed target outline of the same shape along the shortest straight-line path so that the moving shape perfectly overlaps the dashed target at the end. The dashed target stays static throughout.",
+    "task_summary_zh": "物体轨迹任务：将一个带颜色的形状（圆形、正方形、三角形或菱形）沿最短直线路径平移到一个虚线轮廓所标示的同形状目标位置，使其在终点处与虚线目标完全重合。虚线目标在整段动画中保持不动。",
+    "video_temporal": {
+      "fps": 16,
+      "hold_frames": 16,
+      "move_frames": 32,
+      "total_frames": 64,
+      "phase_order": [
+        "hold_initial",
+        "linear_translate",
+        "hold_final"
+      ]
+    },
+    "interpretation": {
+      "first_frame_is_initial_state": true,
+      "final_frame_is_goal_state": true,
+      "video_animates_solution": true,
+      "dashed_target_is_static": true
+    }
+  },
+  "scoring_contract": {
+    "evaluator_class": "ObjectTrajectoryEvaluator",
+    "evalkit_pending_confirmation": true,
+    "evalkit_map_key": "G-1_object_trajectory_data-generator",
+    "task_specific_dimension_weights": {
+      "final_overlap_accuracy": 0.4,
+      "trajectory_linearity": 0.25,
+      "shape_color_preservation": 0.2,
+      "target_static_preservation": 0.15
+    },
+    "required_semantic_fields": [
+      "task_type",
+      "shape",
+      "start_pos_px",
+      "end_pos_px",
+      "path_length_px",
+      "heading_deg"
+    ],
+    "pixel_tolerance_notes": {
+      "final_overlap_mean_abs_diff_lt": 15,
+      "trajectory_endpoint_radius_px_lt": 8
+    },
+    "notes": "Evaluator compares the model's final video frame to the goal (solid shape fully overlapping dashed target); trajectory linearity penalises detours from the straight-line path; target_static_preservation checks the dashed outline is unchanged across frames."
+  },
+  "generic_declarative_render": {
+    "schema": "generic_declarative_canvas_v2",
+    "version": 2,
+    "prompt": "The scene contains a diamond object and a dashed target position (indicated by a dashed outline of the same shape). Keep the dashed target position unchanged. Move the diamond object to the dashed target position along the shortest path, ensuring it completely overlaps with the target.",
+    "canvas": {
+      "width": 1024,
+      "height": 1024,
+      "background_rgb": [
+        255,
+        255,
+        255
+      ]
+    },
+    "first_frame": {
+      "layers": [
+        {
+          "type": "stroked_shape",
+          "stroke_rgb": [
+            0,
+            0,
+            0
+          ],
+          "stroke_width_px": 3,
+          "dash_pattern_px": [
+            5,
+            5
+          ],
+          "kind": "polygon",
+          "points_px": [
+            [
+              100.0,
+              215.0
+            ],
+            [
+              184.0,
+              299.0
+            ],
+            [
+              100.0,
+              383.0
+            ],
+            [
+              16.0,
+              299.0
+            ]
+          ]
+        },
+        {
+          "type": "filled_shape",
+          "fill_rgb": [
+            120,
+            120,
+            95
+          ],
+          "outline_rgb": [
+            0,
+            0,
+            0
+          ],
+          "outline_width_px": 1,
+          "kind": "polygon",
+          "points_px": [
+            [
+              752.0,
+              651.0
+            ],
+            [
+              836.0,
+              735.0
+            ],
+            [
+              752.0,
+              819.0
+            ],
+            [
+              668.0,
+              735.0
+            ]
+          ]
+        }
+      ]
+    },
+    "final_frame": {
+      "layers": [
+        {
+          "type": "stroked_shape",
+          "stroke_rgb": [
+            0,
+            0,
+            0
+          ],
+          "stroke_width_px": 3,
+          "dash_pattern_px": [
+            5,
+            5
+          ],
+          "kind": "polygon",
+          "points_px": [
+            [
+              100.0,
+              215.0
+            ],
+            [
+              184.0,
+              299.0
+            ],
+            [
+              100.0,
+              383.0
+            ],
+            [
+              16.0,
+              299.0
+            ]
+          ]
+        },
+        {
+          "type": "filled_shape",
+          "fill_rgb": [
+            120,
+            120,
+            95
+          ],
+          "outline_rgb": [
+            0,
+            0,
+            0
+          ],
+          "outline_width_px": 1,
+          "kind": "polygon",
+          "points_px": [
+            [
+              100.0,
+              215.0
+            ],
+            [
+              184.0,
+              299.0
+            ],
+            [
+              100.0,
+              383.0
+            ],
+            [
+              16.0,
+              299.0
+            ]
+          ]
+        }
+      ]
+    },
+    "video": {
+      "fps": 16,
+      "frames": [
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  752.0,
+                  651.0
+                ],
+                [
+                  836.0,
+                  735.0
+                ],
+                [
+                  752.0,
+                  819.0
+                ],
+                [
+                  668.0,
+                  735.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  731.625,
+                  637.375
+                ],
+                [
+                  815.625,
+                  721.375
+                ],
+                [
+                  731.625,
+                  805.375
+                ],
+                [
+                  647.625,
+                  721.375
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  711.25,
+                  623.75
+                ],
+                [
+                  795.25,
+                  707.75
+                ],
+                [
+                  711.25,
+                  791.75
+                ],
+                [
+                  627.25,
+                  707.75
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  690.875,
+                  610.125
+                ],
+                [
+                  774.875,
+                  694.125
+                ],
+                [
+                  690.875,
+                  778.125
+                ],
+                [
+                  606.875,
+                  694.125
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  670.5,
+                  596.5
+                ],
+                [
+                  754.5,
+                  680.5
+                ],
+                [
+                  670.5,
+                  764.5
+                ],
+                [
+                  586.5,
+                  680.5
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  650.125,
+                  582.875
+                ],
+                [
+                  734.125,
+                  666.875
+                ],
+                [
+                  650.125,
+                  750.875
+                ],
+                [
+                  566.125,
+                  666.875
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  629.75,
+                  569.25
+                ],
+                [
+                  713.75,
+                  653.25
+                ],
+                [
+                  629.75,
+                  737.25
+                ],
+                [
+                  545.75,
+                  653.25
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  609.375,
+                  555.625
+                ],
+                [
+                  693.375,
+                  639.625
+                ],
+                [
+                  609.375,
+                  723.625
+                ],
+                [
+                  525.375,
+                  639.625
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  589.0,
+                  542.0
+                ],
+                [
+                  673.0,
+                  626.0
+                ],
+                [
+                  589.0,
+                  710.0
+                ],
+                [
+                  505.0,
+                  626.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  568.625,
+                  528.375
+                ],
+                [
+                  652.625,
+                  612.375
+                ],
+                [
+                  568.625,
+                  696.375
+                ],
+                [
+                  484.625,
+                  612.375
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  548.25,
+                  514.75
+                ],
+                [
+                  632.25,
+                  598.75
+                ],
+                [
+                  548.25,
+                  682.75
+                ],
+                [
+                  464.25,
+                  598.75
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  527.875,
+                  501.125
+                ],
+                [
+                  611.875,
+                  585.125
+                ],
+                [
+                  527.875,
+                  669.125
+                ],
+                [
+                  443.875,
+                  585.125
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  507.5,
+                  487.5
+                ],
+                [
+                  591.5,
+                  571.5
+                ],
+                [
+                  507.5,
+                  655.5
+                ],
+                [
+                  423.5,
+                  571.5
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  487.125,
+                  473.875
+                ],
+                [
+                  571.125,
+                  557.875
+                ],
+                [
+                  487.125,
+                  641.875
+                ],
+                [
+                  403.125,
+                  557.875
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  466.75,
+                  460.25
+                ],
+                [
+                  550.75,
+                  544.25
+                ],
+                [
+                  466.75,
+                  628.25
+                ],
+                [
+                  382.75,
+                  544.25
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  446.375,
+                  446.625
+                ],
+                [
+                  530.375,
+                  530.625
+                ],
+                [
+                  446.375,
+                  614.625
+                ],
+                [
+                  362.375,
+                  530.625
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  426.0,
+                  433.0
+                ],
+                [
+                  510.0,
+                  517.0
+                ],
+                [
+                  426.0,
+                  601.0
+                ],
+                [
+                  342.0,
+                  517.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  405.625,
+                  419.375
+                ],
+                [
+                  489.625,
+                  503.375
+                ],
+                [
+                  405.625,
+                  587.375
+                ],
+                [
+                  321.625,
+                  503.375
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  385.25,
+                  405.75
+                ],
+                [
+                  469.25,
+                  489.75
+                ],
+                [
+                  385.25,
+                  573.75
+                ],
+                [
+                  301.25,
+                  489.75
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  364.875,
+                  392.125
+                ],
+                [
+                  448.875,
+                  476.125
+                ],
+                [
+                  364.875,
+                  560.125
+                ],
+                [
+                  280.875,
+                  476.125
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  344.5,
+                  378.5
+                ],
+                [
+                  428.5,
+                  462.5
+                ],
+                [
+                  344.5,
+                  546.5
+                ],
+                [
+                  260.5,
+                  462.5
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  324.125,
+                  364.875
+                ],
+                [
+                  408.125,
+                  448.875
+                ],
+                [
+                  324.125,
+                  532.875
+                ],
+                [
+                  240.125,
+                  448.875
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  303.75,
+                  351.25
+                ],
+                [
+                  387.75,
+                  435.25
+                ],
+                [
+                  303.75,
+                  519.25
+                ],
+                [
+                  219.75,
+                  435.25
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  283.375,
+                  337.625
+                ],
+                [
+                  367.375,
+                  421.625
+                ],
+                [
+                  283.375,
+                  505.625
+                ],
+                [
+                  199.375,
+                  421.625
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  263.0,
+                  324.0
+                ],
+                [
+                  347.0,
+                  408.0
+                ],
+                [
+                  263.0,
+                  492.0
+                ],
+                [
+                  179.0,
+                  408.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  242.625,
+                  310.375
+                ],
+                [
+                  326.625,
+                  394.375
+                ],
+                [
+                  242.625,
+                  478.375
+                ],
+                [
+                  158.625,
+                  394.375
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  222.25,
+                  296.75
+                ],
+                [
+                  306.25,
+                  380.75
+                ],
+                [
+                  222.25,
+                  464.75
+                ],
+                [
+                  138.25,
+                  380.75
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  201.875,
+                  283.125
+                ],
+                [
+                  285.875,
+                  367.125
+                ],
+                [
+                  201.875,
+                  451.125
+                ],
+                [
+                  117.875,
+                  367.125
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  181.5,
+                  269.5
+                ],
+                [
+                  265.5,
+                  353.5
+                ],
+                [
+                  181.5,
+                  437.5
+                ],
+                [
+                  97.5,
+                  353.5
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  161.125,
+                  255.875
+                ],
+                [
+                  245.125,
+                  339.875
+                ],
+                [
+                  161.125,
+                  423.875
+                ],
+                [
+                  77.125,
+                  339.875
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  140.75,
+                  242.25
+                ],
+                [
+                  224.75,
+                  326.25
+                ],
+                [
+                  140.75,
+                  410.25
+                ],
+                [
+                  56.75,
+                  326.25
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  120.375,
+                  228.625
+                ],
+                [
+                  204.375,
+                  312.625
+                ],
+                [
+                  120.375,
+                  396.625
+                ],
+                [
+                  36.375,
+                  312.625
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                120,
+                120,
+                95
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "polygon",
+              "points_px": [
+                [
+                  100.0,
+                  215.0
+                ],
+                [
+                  184.0,
+                  299.0
+                ],
+                [
+                  100.0,
+                  383.0
+                ],
+                [
+                  16.0,
+                  299.0
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "created_at": "2026-05-21T02:30:40.828456",
+    "random_seed": 42,
+    "package": "vbvr-meta-generator-g1",
+    "declarative_render_schema": "generic_declarative_canvas_v2",
+    "metadata_schema_version": "vbvr-meta-v0",
+    "layer_vocabulary_used": [
+      "filled_shape",
+      "stroked_shape"
+    ]
+  }
+}

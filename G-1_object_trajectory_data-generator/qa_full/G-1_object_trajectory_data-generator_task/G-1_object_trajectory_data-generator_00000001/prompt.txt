@@ -1,0 +1,1 @@
+The scene contains a square object and a dashed target position (indicated by a dashed outline of the same shape). Keep the dashed target position unchanged. Move the square object to the dashed target position along the shortest path, ensuring it completely overlaps with the target.

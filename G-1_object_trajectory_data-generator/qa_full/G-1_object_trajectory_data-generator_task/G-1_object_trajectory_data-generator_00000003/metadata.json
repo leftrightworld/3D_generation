@@ -1,0 +1,2905 @@
+{
+  "task_id": "G-1_object_trajectory_data-generator_00000003",
+  "generator": "G-1_object_trajectory_data-generator",
+  "timestamp": "2026-05-21T02:30:42.133173",
+  "parameters": {
+    "shape": "square",
+    "ball_color_rgb": [
+      97,
+      103,
+      122
+    ],
+    "ball_color_hex": "#61677a",
+    "start_pos": [
+      321,
+      864
+    ],
+    "end_pos": [
+      768,
+      819
+    ],
+    "ball_radius": 70,
+    "background_rgb": [
+      255,
+      255,
+      255
+    ],
+    "outline_rgb": [
+      0,
+      0,
+      0
+    ],
+    "dash_color_rgb": [
+      0,
+      0,
+      0
+    ],
+    "outline_width_px": 1,
+    "dash_width_px": 3,
+    "dash_length_px": 5,
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "video_fps": 16,
+    "hold_frames": 16,
+    "move_frames": 32,
+    "total_frames": 64,
+    "path_length_px": 449.259391,
+    "heading_rad": -0.100333,
+    "heading_deg": -5.748663
+  },
+  "param_hash": "295fa43a4b733b90",
+  "generation": {
+    "seed": 42,
+    "git": {
+      "commit": "",
+      "branch": "",
+      "repo": "",
+      "is_dirty": false
+    }
+  },
+  "schema_version": "vbvr-meta-v0",
+  "semantic_ground_truth": {
+    "task_type": "object_trajectory",
+    "motion_model": "linear_translation_shortest_path",
+    "shape": "square",
+    "start_pos_px": [
+      321,
+      864
+    ],
+    "end_pos_px": [
+      768,
+      819
+    ],
+    "path_length_px": 449.259391,
+    "heading_deg": -5.748663,
+    "objects": [
+      {
+        "symbol": "moving_shape",
+        "shape": "square",
+        "role": "agent",
+        "color_rgb": [
+          97,
+          103,
+          122
+        ],
+        "color_hex": "#61677a",
+        "radius_px": 70,
+        "initial_position_px": [
+          321,
+          864
+        ],
+        "final_position_px": [
+          768,
+          819
+        ]
+      },
+      {
+        "symbol": "dashed_target",
+        "shape": "square",
+        "role": "target_outline",
+        "color_rgb": [
+          0,
+          0,
+          0
+        ],
+        "radius_px": 70,
+        "initial_position_px": [
+          768,
+          819
+        ],
+        "final_position_px": [
+          768,
+          819
+        ]
+      }
+    ],
+    "rules_en": [
+      "There is exactly one solid coloured shape and one dashed target outline of the same shape in the scene.",
+      "The dashed target outline is static; only the solid shape moves.",
+      "The solid shape translates along the shortest straight-line path from its starting centre to the target centre.",
+      "The shape does not rotate, scale, or change colour during the motion.",
+      "At the final frame the solid shape and dashed target completely overlap."
+    ],
+    "task_summary_en": "Object trajectory: translate a single coloured shape (circle, square, triangle, or diamond) from its starting position to a dashed target outline of the same shape along the shortest straight-line path so that the moving shape perfectly overlaps the dashed target at the end. The dashed target stays static throughout.",
+    "task_summary_zh": "物体轨迹任务：将一个带颜色的形状（圆形、正方形、三角形或菱形）沿最短直线路径平移到一个虚线轮廓所标示的同形状目标位置，使其在终点处与虚线目标完全重合。虚线目标在整段动画中保持不动。",
+    "video_temporal": {
+      "fps": 16,
+      "hold_frames": 16,
+      "move_frames": 32,
+      "total_frames": 64,
+      "phase_order": [
+        "hold_initial",
+        "linear_translate",
+        "hold_final"
+      ]
+    },
+    "interpretation": {
+      "first_frame_is_initial_state": true,
+      "final_frame_is_goal_state": true,
+      "video_animates_solution": true,
+      "dashed_target_is_static": true
+    }
+  },
+  "scoring_contract": {
+    "evaluator_class": "ObjectTrajectoryEvaluator",
+    "evalkit_pending_confirmation": true,
+    "evalkit_map_key": "G-1_object_trajectory_data-generator",
+    "task_specific_dimension_weights": {
+      "final_overlap_accuracy": 0.4,
+      "trajectory_linearity": 0.25,
+      "shape_color_preservation": 0.2,
+      "target_static_preservation": 0.15
+    },
+    "required_semantic_fields": [
+      "task_type",
+      "shape",
+      "start_pos_px",
+      "end_pos_px",
+      "path_length_px",
+      "heading_deg"
+    ],
+    "pixel_tolerance_notes": {
+      "final_overlap_mean_abs_diff_lt": 15,
+      "trajectory_endpoint_radius_px_lt": 8
+    },
+    "notes": "Evaluator compares the model's final video frame to the goal (solid shape fully overlapping dashed target); trajectory linearity penalises detours from the straight-line path; target_static_preservation checks the dashed outline is unchanged across frames."
+  },
+  "generic_declarative_render": {
+    "schema": "generic_declarative_canvas_v2",
+    "version": 2,
+    "prompt": "The scene contains a square object and a dashed target position (indicated by a dashed outline of the same shape). Keep the dashed target position unchanged. Move the square object to the dashed target position along the shortest path, ensuring it completely overlaps with the target.",
+    "canvas": {
+      "width": 1024,
+      "height": 1024,
+      "background_rgb": [
+        255,
+        255,
+        255
+      ]
+    },
+    "first_frame": {
+      "layers": [
+        {
+          "type": "stroked_shape",
+          "stroke_rgb": [
+            0,
+            0,
+            0
+          ],
+          "stroke_width_px": 3,
+          "dash_pattern_px": [
+            5,
+            5
+          ],
+          "kind": "rect",
+          "x_px": 698.0,
+          "y_px": 749.0,
+          "w_px": 140.0,
+          "h_px": 140.0
+        },
+        {
+          "type": "filled_shape",
+          "fill_rgb": [
+            97,
+            103,
+            122
+          ],
+          "outline_rgb": [
+            0,
+            0,
+            0
+          ],
+          "outline_width_px": 1,
+          "kind": "rect",
+          "x_px": 251.0,
+          "y_px": 794.0,
+          "w_px": 140.0,
+          "h_px": 140.0
+        }
+      ]
+    },
+    "final_frame": {
+      "layers": [
+        {
+          "type": "stroked_shape",
+          "stroke_rgb": [
+            0,
+            0,
+            0
+          ],
+          "stroke_width_px": 3,
+          "dash_pattern_px": [
+            5,
+            5
+          ],
+          "kind": "rect",
+          "x_px": 698.0,
+          "y_px": 749.0,
+          "w_px": 140.0,
+          "h_px": 140.0
+        },
+        {
+          "type": "filled_shape",
+          "fill_rgb": [
+            97,
+            103,
+            122
+          ],
+          "outline_rgb": [
+            0,
+            0,
+            0
+          ],
+          "outline_width_px": 1,
+          "kind": "rect",
+          "x_px": 698.0,
+          "y_px": 749.0,
+          "w_px": 140.0,
+          "h_px": 140.0
+        }
+      ]
+    },
+    "video": {
+      "fps": 16,
+      "frames": [
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 251.0,
+              "y_px": 794.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 264.96875,
+              "y_px": 792.59375,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 278.9375,
+              "y_px": 791.1875,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 292.90625,
+              "y_px": 789.78125,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 306.875,
+              "y_px": 788.375,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 320.84375,
+              "y_px": 786.96875,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 334.8125,
+              "y_px": 785.5625,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 348.78125,
+              "y_px": 784.15625,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 362.75,
+              "y_px": 782.75,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 376.71875,
+              "y_px": 781.34375,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 390.6875,
+              "y_px": 779.9375,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 404.65625,
+              "y_px": 778.53125,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 418.625,
+              "y_px": 777.125,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 432.59375,
+              "y_px": 775.71875,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 446.5625,
+              "y_px": 774.3125,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 460.53125,
+              "y_px": 772.90625,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 474.5,
+              "y_px": 771.5,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 488.46875,
+              "y_px": 770.09375,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 502.4375,
+              "y_px": 768.6875,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 516.40625,
+              "y_px": 767.28125,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 530.375,
+              "y_px": 765.875,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 544.34375,
+              "y_px": 764.46875,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 558.3125,
+              "y_px": 763.0625,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 572.28125,
+              "y_px": 761.65625,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 586.25,
+              "y_px": 760.25,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 600.21875,
+              "y_px": 758.84375,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 614.1875,
+              "y_px": 757.4375,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 628.15625,
+              "y_px": 756.03125,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 642.125,
+              "y_px": 754.625,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 656.09375,
+              "y_px": 753.21875,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 670.0625,
+              "y_px": 751.8125,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 684.03125,
+              "y_px": 750.40625,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        },
+        {
+          "layers": [
+            {
+              "type": "stroked_shape",
+              "stroke_rgb": [
+                0,
+                0,
+                0
+              ],
+              "stroke_width_px": 3,
+              "dash_pattern_px": [
+                5,
+                5
+              ],
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            },
+            {
+              "type": "filled_shape",
+              "fill_rgb": [
+                97,
+                103,
+                122
+              ],
+              "outline_rgb": [
+                0,
+                0,
+                0
+              ],
+              "outline_width_px": 1,
+              "kind": "rect",
+              "x_px": 698.0,
+              "y_px": 749.0,
+              "w_px": 140.0,
+              "h_px": 140.0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "created_at": "2026-05-21T02:30:42.133173",
+    "random_seed": 42,
+    "package": "vbvr-meta-generator-g1",
+    "declarative_render_schema": "generic_declarative_canvas_v2",
+    "metadata_schema_version": "vbvr-meta-v0",
+    "layer_vocabulary_used": [
+      "filled_shape",
+      "stroked_shape"
+    ]
+  }
+}
