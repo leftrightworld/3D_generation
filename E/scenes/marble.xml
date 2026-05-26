@@ -1,0 +1,221 @@
+<mujoco model="marble_ramp">
+  <compiler angle="radian" coordinate="local" autolimits="true"/>
+  <option timestep="0.001" gravity="0 0 -9.81" integrator="implicitfast"
+          impratio="3" cone="elliptic"/>
+
+  <visual>
+    <headlight diffuse="0 0 0" ambient="0.50 0.48 0.55" specular="0 0 0"/>
+    <rgba haze="0.94 0.91 0.90 1"/>
+    <global azimuth="120" elevation="-15" offwidth="1920" offheight="1080" fovy="35"/>
+    <quality shadowsize="8192" offsamples="8"/>
+    <map shadowclip="6" shadowscale="0.7"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="flat"
+             rgb1="0.74 0.68 0.86" rgb2="0.74 0.68 0.86"
+             width="512" height="512" mark="none" markrgb="0 0 0"/>
+    <material name="floor_mat" rgba="0.94 0.91 0.90 1" specular="0" shininess="0"/>
+    <material name="ramp_wood" rgba="0.93 0.78 0.50 1" specular="0.15" shininess="0.15"/>
+    <material name="ramp_wood_dark" rgba="0.86 0.71 0.42 1" specular="0.15" shininess="0.15"/>
+    <material name="platform_wood" rgba="0.88 0.84 0.86 1" specular="0.1" shininess="0.1"/>
+    <material name="marble_blue" rgba="0.36 0.62 0.85 1" specular="0.5" shininess="0.6"/>
+  </asset>
+
+  <default>
+    <geom friction="0.4 0.02 0.0005" solref="0.002 1" solimp="0.95 0.99 0.001"/>
+  </default>
+
+  <worldbody>
+    <light pos="0 0 12" dir="-0.30 0.55 -1" directional="true" castshadow="true"
+           diffuse="0.85 0.82 0.78" specular="0.15 0.15 0.15"/>
+    <light pos="0 0 8" dir="0.40 -0.30 -1" directional="true" castshadow="false"
+           diffuse="0.28 0.28 0.34" specular="0 0 0"/>
+
+    <geom name="floor" type="plane" size="40 40 0.1" material="floor_mat"/>
+
+    <!-- Top platform (white-ish block) where the marble starts -->
+    <geom type="box" pos="0.450 0 0.560"
+          size="0.070 0.100 0.010"
+          material="platform_wood"/>
+    <!-- A small "wall" so marble doesn't roll backward off the platform -->
+    <geom type="box" pos="0.515 0 0.595"
+          size="0.005 0.100 0.025" material="platform_wood"/>
+
+    <!-- Curved ramp (made of 18 short segments) -->
+    <geom type="box" pos="0.0240 0 0.0005" euler="0 0.0436 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.0718 0 0.0047" euler="0 0.1309 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood_dark"/>
+    <geom type="box" pos="0.1190 0 0.0130" euler="0 0.2182 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.1654 0 0.0255" euler="0 0.3054 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood_dark"/>
+    <geom type="box" pos="0.2105 0 0.0419" euler="0 0.3927 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.2540 0 0.0621" euler="0 0.4800 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood_dark"/>
+    <geom type="box" pos="0.2955 0 0.0861" euler="0 0.5672 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.3348 0 0.1137" euler="0 0.6545 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood_dark"/>
+    <geom type="box" pos="0.3716 0 0.1445" euler="0 0.7418 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.4055 0 0.1784" euler="0 0.8290 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood_dark"/>
+    <geom type="box" pos="0.4363 0 0.2152" euler="0 0.9163 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.4639 0 0.2545" euler="0 1.0036 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood_dark"/>
+    <geom type="box" pos="0.4879 0 0.2960" euler="0 1.0908 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.5081 0 0.3395" euler="0 1.1781 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood_dark"/>
+    <geom type="box" pos="0.5245 0 0.3846" euler="0 1.2654 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.5370 0 0.4310" euler="0 1.3526 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood_dark"/>
+    <geom type="box" pos="0.5453 0 0.4782" euler="0 1.4399 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.5495 0 0.5260" euler="0 1.5272 0"
+          size="0.0264 0.0900 0.0075"
+          material="ramp_wood_dark"/>
+
+    <!-- Side walls so marble stays in the channel -->
+    <geom type="box" pos="0.0240 -0.0980 0.0205" euler="0 0.0436 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.0718 -0.0980 0.0247" euler="0 0.1309 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.1190 -0.0980 0.0330" euler="0 0.2182 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.1654 -0.0980 0.0455" euler="0 0.3054 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.2105 -0.0980 0.0619" euler="0 0.3927 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.2540 -0.0980 0.0821" euler="0 0.4800 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.2955 -0.0980 0.1061" euler="0 0.5672 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.3348 -0.0980 0.1337" euler="0 0.6545 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.3716 -0.0980 0.1645" euler="0 0.7418 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.4055 -0.0980 0.1984" euler="0 0.8290 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.4363 -0.0980 0.2352" euler="0 0.9163 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.4639 -0.0980 0.2745" euler="0 1.0036 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.4879 -0.0980 0.3160" euler="0 1.0908 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.5081 -0.0980 0.3595" euler="0 1.1781 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.5245 -0.0980 0.4046" euler="0 1.2654 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.5370 -0.0980 0.4510" euler="0 1.3526 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.5453 -0.0980 0.4982" euler="0 1.4399 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.5495 -0.0980 0.5460" euler="0 1.5272 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.0240 0.0980 0.0205" euler="0 0.0436 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.0718 0.0980 0.0247" euler="0 0.1309 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.1190 0.0980 0.0330" euler="0 0.2182 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.1654 0.0980 0.0455" euler="0 0.3054 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.2105 0.0980 0.0619" euler="0 0.3927 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.2540 0.0980 0.0821" euler="0 0.4800 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.2955 0.0980 0.1061" euler="0 0.5672 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.3348 0.0980 0.1337" euler="0 0.6545 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.3716 0.0980 0.1645" euler="0 0.7418 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.4055 0.0980 0.1984" euler="0 0.8290 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.4363 0.0980 0.2352" euler="0 0.9163 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.4639 0.0980 0.2745" euler="0 1.0036 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.4879 0.0980 0.3160" euler="0 1.0908 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.5081 0.0980 0.3595" euler="0 1.1781 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.5245 0.0980 0.4046" euler="0 1.2654 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.5370 0.0980 0.4510" euler="0 1.3526 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.5453 0.0980 0.4982" euler="0 1.4399 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+    <geom type="box" pos="0.5495 0.0980 0.5460" euler="0 1.5272 0"
+          size="0.0264 0.008 0.0200"
+          material="ramp_wood"/>
+
+    <!-- Marble: blue sphere, sits on the platform, rolls down when released -->
+    <body name="marble" pos="0.400 0 0.590">
+      <joint type="free"/>
+      <geom type="sphere" size="0.035" mass="0.05" material="marble_blue"/>
+    </body>
+
+    <!-- Camera: front-left 3/4 view, framing the whole ramp -->
+    <camera name="cam" pos="-1.7 -1.4 0.85" fovy="36"
+            xyaxes="0.63 -0.77 0   0.18 0.15 0.97"/>
+  </worldbody>
+</mujoco>

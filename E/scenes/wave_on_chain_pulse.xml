@@ -1,0 +1,234 @@
+<mujoco model="wave_on_chain_pulse">
+  <!-- 15-mass transverse chain; pulse on m0 via --init-qpos. -->
+  <compiler angle="radian" coordinate="local" autolimits="true"/>
+  <option timestep="0.001" gravity="0 0 0" integrator="implicitfast"/>
+
+  <visual>
+    <headlight diffuse="0 0 0" ambient="0.50 0.48 0.55" specular="0 0 0"/>
+    <rgba haze="0.94 0.91 0.90 1"/>
+    <global azimuth="120" elevation="-15" offwidth="1920" offheight="1080" fovy="38"/>
+    <quality shadowsize="8192" offsamples="8"/>
+    <map shadowclip="6" shadowscale="0.7"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="flat"
+             rgb1="0.74 0.68 0.86" rgb2="0.74 0.68 0.86"
+             width="512" height="512" mark="none" markrgb="0 0 0"/>
+    <material name="floor_mat" rgba="0.94 0.91 0.90 1" specular="0" shininess="0"/>
+    <material name="bob_red" rgba="0.86 0.34 0.30 1" specular="0.35" shininess="0.4"/>
+    <material name="bob_blue" rgba="0.30 0.50 0.78 1" specular="0.35" shininess="0.4"/>
+    <material name="ref_line" rgba="0.55 0.52 0.50 0.45" specular="0" shininess="0"/>
+  </asset>
+
+  <worldbody>
+    <light pos="0 0 12" dir="-0.30 0.55 -1" directional="true" castshadow="true"
+           diffuse="0.85 0.82 0.78" specular="0.15 0.15 0.15"/>
+    <light pos="0 0 8" dir="0.40 -0.30 -1" directional="true" castshadow="false"
+           diffuse="0.28 0.28 0.34" specular="0 0 0"/>
+
+    <geom name="floor" type="plane" size="40 40 0.1" material="floor_mat"
+          contype="0" conaffinity="0"/>
+
+    <!-- Equilibrium height z = 0.25 (visual only). -->
+    <geom name="eq_line" type="box" size="0.4050 0.001 0.001"
+          pos="0.3850 0 0.2500" material="ref_line"
+          contype="0" conaffinity="0"/>
+
+    <body name="m0" pos="0.0000 0 0.2500">
+      <joint name="z0" type="slide" axis="0 0 1"
+             stiffness="0" damping="0.1" range="-0.10 0.10"/>
+      <geom type="sphere" size="0.014" mass="0.02" material="bob_red"
+            contype="0" conaffinity="0"/>
+      <site name="s0" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="m1" pos="0.0550 0 0.2500">
+      <joint name="z1" type="slide" axis="0 0 1"
+             stiffness="0" damping="0.1" range="-0.10 0.10"/>
+      <geom type="sphere" size="0.014" mass="0.02" material="bob_blue"
+            contype="0" conaffinity="0"/>
+      <site name="s1" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="m2" pos="0.1100 0 0.2500">
+      <joint name="z2" type="slide" axis="0 0 1"
+             stiffness="0" damping="0.1" range="-0.10 0.10"/>
+      <geom type="sphere" size="0.014" mass="0.02" material="bob_blue"
+            contype="0" conaffinity="0"/>
+      <site name="s2" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="m3" pos="0.1650 0 0.2500">
+      <joint name="z3" type="slide" axis="0 0 1"
+             stiffness="0" damping="0.1" range="-0.10 0.10"/>
+      <geom type="sphere" size="0.014" mass="0.02" material="bob_blue"
+            contype="0" conaffinity="0"/>
+      <site name="s3" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="m4" pos="0.2200 0 0.2500">
+      <joint name="z4" type="slide" axis="0 0 1"
+             stiffness="0" damping="0.1" range="-0.10 0.10"/>
+      <geom type="sphere" size="0.014" mass="0.02" material="bob_blue"
+            contype="0" conaffinity="0"/>
+      <site name="s4" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="m5" pos="0.2750 0 0.2500">
+      <joint name="z5" type="slide" axis="0 0 1"
+             stiffness="0" damping="0.1" range="-0.10 0.10"/>
+      <geom type="sphere" size="0.014" mass="0.02" material="bob_blue"
+            contype="0" conaffinity="0"/>
+      <site name="s5" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="m6" pos="0.3300 0 0.2500">
+      <joint name="z6" type="slide" axis="0 0 1"
+             stiffness="0" damping="0.1" range="-0.10 0.10"/>
+      <geom type="sphere" size="0.014" mass="0.02" material="bob_blue"
+            contype="0" conaffinity="0"/>
+      <site name="s6" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="m7" pos="0.3850 0 0.2500">
+      <joint name="z7" type="slide" axis="0 0 1"
+             stiffness="0" damping="0.1" range="-0.10 0.10"/>
+      <geom type="sphere" size="0.014" mass="0.02" material="bob_blue"
+            contype="0" conaffinity="0"/>
+      <site name="s7" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="m8" pos="0.4400 0 0.2500">
+      <joint name="z8" type="slide" axis="0 0 1"
+             stiffness="0" damping="0.1" range="-0.10 0.10"/>
+      <geom type="sphere" size="0.014" mass="0.02" material="bob_blue"
+            contype="0" conaffinity="0"/>
+      <site name="s8" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="m9" pos="0.4950 0 0.2500">
+      <joint name="z9" type="slide" axis="0 0 1"
+             stiffness="0" damping="0.1" range="-0.10 0.10"/>
+      <geom type="sphere" size="0.014" mass="0.02" material="bob_blue"
+            contype="0" conaffinity="0"/>
+      <site name="s9" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="m10" pos="0.5500 0 0.2500">
+      <joint name="z10" type="slide" axis="0 0 1"
+             stiffness="0" damping="0.1" range="-0.10 0.10"/>
+      <geom type="sphere" size="0.014" mass="0.02" material="bob_blue"
+            contype="0" conaffinity="0"/>
+      <site name="s10" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="m11" pos="0.6050 0 0.2500">
+      <joint name="z11" type="slide" axis="0 0 1"
+             stiffness="0" damping="0.1" range="-0.10 0.10"/>
+      <geom type="sphere" size="0.014" mass="0.02" material="bob_blue"
+            contype="0" conaffinity="0"/>
+      <site name="s11" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="m12" pos="0.6600 0 0.2500">
+      <joint name="z12" type="slide" axis="0 0 1"
+             stiffness="0" damping="0.1" range="-0.10 0.10"/>
+      <geom type="sphere" size="0.014" mass="0.02" material="bob_blue"
+            contype="0" conaffinity="0"/>
+      <site name="s12" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="m13" pos="0.7150 0 0.2500">
+      <joint name="z13" type="slide" axis="0 0 1"
+             stiffness="0" damping="0.1" range="-0.10 0.10"/>
+      <geom type="sphere" size="0.014" mass="0.02" material="bob_blue"
+            contype="0" conaffinity="0"/>
+      <site name="s13" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="m14" pos="0.7700 0 0.2500">
+      <joint name="z14" type="slide" axis="0 0 1"
+             stiffness="0" damping="0.1" range="-0.10 0.10"/>
+      <geom type="sphere" size="0.014" mass="0.02" material="bob_blue"
+            contype="0" conaffinity="0"/>
+      <site name="s14" pos="0 0 0" size="0.001"/>
+    </body>
+
+    <camera name="cam" pos="0.38 -1.00 0.28"
+            fovy="34" xyaxes="1.0000 -0.0000 0.0000   0.0000 0.0300 0.9996"/>
+  </worldbody>
+
+  <tendon>
+    <spatial name="link0" stiffness="220.0" damping="1.0"
+             springlength="0.05500" width="0.006"
+             rgba="0.35 0.32 0.30 0.90" limited="false">
+      <site site="s0"/>
+      <site site="s1"/>
+    </spatial>
+    <spatial name="link1" stiffness="220.0" damping="1.0"
+             springlength="0.05500" width="0.006"
+             rgba="0.35 0.32 0.30 0.90" limited="false">
+      <site site="s1"/>
+      <site site="s2"/>
+    </spatial>
+    <spatial name="link2" stiffness="220.0" damping="1.0"
+             springlength="0.05500" width="0.006"
+             rgba="0.35 0.32 0.30 0.90" limited="false">
+      <site site="s2"/>
+      <site site="s3"/>
+    </spatial>
+    <spatial name="link3" stiffness="220.0" damping="1.0"
+             springlength="0.05500" width="0.006"
+             rgba="0.35 0.32 0.30 0.90" limited="false">
+      <site site="s3"/>
+      <site site="s4"/>
+    </spatial>
+    <spatial name="link4" stiffness="220.0" damping="1.0"
+             springlength="0.05500" width="0.006"
+             rgba="0.35 0.32 0.30 0.90" limited="false">
+      <site site="s4"/>
+      <site site="s5"/>
+    </spatial>
+    <spatial name="link5" stiffness="220.0" damping="1.0"
+             springlength="0.05500" width="0.006"
+             rgba="0.35 0.32 0.30 0.90" limited="false">
+      <site site="s5"/>
+      <site site="s6"/>
+    </spatial>
+    <spatial name="link6" stiffness="220.0" damping="1.0"
+             springlength="0.05500" width="0.006"
+             rgba="0.35 0.32 0.30 0.90" limited="false">
+      <site site="s6"/>
+      <site site="s7"/>
+    </spatial>
+    <spatial name="link7" stiffness="220.0" damping="1.0"
+             springlength="0.05500" width="0.006"
+             rgba="0.35 0.32 0.30 0.90" limited="false">
+      <site site="s7"/>
+      <site site="s8"/>
+    </spatial>
+    <spatial name="link8" stiffness="220.0" damping="1.0"
+             springlength="0.05500" width="0.006"
+             rgba="0.35 0.32 0.30 0.90" limited="false">
+      <site site="s8"/>
+      <site site="s9"/>
+    </spatial>
+    <spatial name="link9" stiffness="220.0" damping="1.0"
+             springlength="0.05500" width="0.006"
+             rgba="0.35 0.32 0.30 0.90" limited="false">
+      <site site="s9"/>
+      <site site="s10"/>
+    </spatial>
+    <spatial name="link10" stiffness="220.0" damping="1.0"
+             springlength="0.05500" width="0.006"
+             rgba="0.35 0.32 0.30 0.90" limited="false">
+      <site site="s10"/>
+      <site site="s11"/>
+    </spatial>
+    <spatial name="link11" stiffness="220.0" damping="1.0"
+             springlength="0.05500" width="0.006"
+             rgba="0.35 0.32 0.30 0.90" limited="false">
+      <site site="s11"/>
+      <site site="s12"/>
+    </spatial>
+    <spatial name="link12" stiffness="220.0" damping="1.0"
+             springlength="0.05500" width="0.006"
+             rgba="0.35 0.32 0.30 0.90" limited="false">
+      <site site="s12"/>
+      <site site="s13"/>
+    </spatial>
+    <spatial name="link13" stiffness="220.0" damping="1.0"
+             springlength="0.05500" width="0.006"
+             rgba="0.35 0.32 0.30 0.90" limited="false">
+      <site site="s13"/>
+      <site site="s14"/>
+    </spatial>
+  </tendon>
+</mujoco>

@@ -1,0 +1,78 @@
+<mujoco model="conical_pendulum">
+  <!-- Conical pendulum at fixed cone half-angle = 25 deg from vertical.
+       Implemented as a 2-DOF gimbal: an outer (yaw) hinge about the world
+       vertical, plus an inner (tilt) hinge about the rotating frame's y axis.
+       The ball joint would be more natural physically, but its qvel frame
+       convention makes it hard to start the bob with the correct horizontal
+       velocity from a CLI init-qvel.  The gimbal sidesteps that.
+
+       For steady conical motion at theta from vertical:
+         Omega = sqrt(g / (L * cos theta))
+       L = 0.5, theta = 25 deg  ->  Omega = 4.65 rad/s, period = 1.35 s. -->
+  <compiler angle="radian" coordinate="local" autolimits="true"/>
+  <option timestep="0.001" gravity="0 0 -9.81" integrator="implicitfast"/>
+
+  <visual>
+    <headlight diffuse="0 0 0" ambient="0.50 0.48 0.55" specular="0 0 0"/>
+    <rgba haze="0.94 0.91 0.90 1"/>
+    <global azimuth="120" elevation="-15" offwidth="1920" offheight="1080" fovy="40"/>
+    <quality shadowsize="8192" offsamples="8"/>
+    <map shadowclip="5" shadowscale="0.7"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="flat"
+             rgb1="0.74 0.68 0.86" rgb2="0.74 0.68 0.86"
+             width="512" height="512" mark="none" markrgb="0 0 0"/>
+
+    <material name="floor_mat" rgba="0.94 0.91 0.90 1" specular="0" shininess="0"/>
+    <material name="wood"      rgba="0.93 0.82 0.58 1" specular="0.1" shininess="0.1"/>
+    <material name="bob_red"   rgba="0.86 0.34 0.30 1" specular="0.4" shininess="0.5"/>
+    <material name="string_mat" rgba="0.28 0.25 0.22 1" specular="0" shininess="0"/>
+  </asset>
+
+  <worldbody>
+    <light pos="0 0 12" dir="-0.35 0.55 -1" directional="true" castshadow="true"
+           diffuse="0.85 0.82 0.78" specular="0.15 0.15 0.15"/>
+    <light pos="0 0 8" dir="0.45 -0.30 -1" directional="true" castshadow="false"
+           diffuse="0.30 0.30 0.36" specular="0 0 0"/>
+
+    <geom name="floor" type="plane" size="40 40 0.1" material="floor_mat"/>
+
+    <!-- L-shaped wooden stand, identical to pendulum.xml. -->
+    <geom type="box" size="0.045 0.045 1.05"
+          pos="0 0.55 1.05" material="wood"/>
+    <geom type="box" size="0.045 0.65 0.045"
+          pos="0 -0.10 2.05" material="wood"/>
+
+    <!-- Gimbal mount at the tip of the horizontal arm: world (0, -0.75, 2.005).
+         Outer body = yaw frame, rotates about world +z.
+         Inner body = pendulum, hinged about the yaw frame's local +y. -->
+    <body name="yaw_frame" pos="0 -0.75 2.005">
+      <joint name="yaw" type="hinge" axis="0 0 1" damping="0.0005"/>
+      <!-- Massless-ish placeholder so the yaw frame has inertia. -->
+      <geom name="yaw_hub" type="sphere" size="0.0015" mass="0.0001"
+            rgba="0.28 0.25 0.22 1" contype="0" conaffinity="0"/>
+
+      <body name="pendulum">
+        <!-- Negative initial tilt to put the rod toward +x in the local
+             frame (rod = body -z; +y rotation sends -z to +x... actually -y
+             rotation does that; choose sign below in init-qpos.) -->
+        <joint name="tilt" type="hinge" axis="0 1 0" damping="0.0005"/>
+        <geom name="rod" type="capsule" fromto="0 0 0   0 0 -0.50"
+              size="0.005" material="string_mat"
+              contype="0" conaffinity="0"/>
+        <geom name="bob" type="sphere" pos="0 0 -0.50" size="0.055"
+              mass="0.15" material="bob_red"
+              contype="0" conaffinity="0"/>
+      </body>
+    </body>
+
+    <!-- Decorative small ball, sister visual to pendulum.xml's. -->
+    <geom type="sphere" pos="0.95 0.10 0.085" size="0.085" material="bob_red"/>
+
+    <!-- Camera: 3/4 front-right, framing the bob's orbital plane. -->
+    <camera name="cam" pos="1.5 -3.5 2.2" fovy="40"
+            xyaxes="0.878 0.479 0   -0.097 0.178 0.979"/>
+  </worldbody>
+</mujoco>

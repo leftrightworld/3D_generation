@@ -1,0 +1,1231 @@
+<mujoco model="membrane_2d_mode_11">
+  <!-- 10×10 square membrane; pure (1,1) mode, +z vertical oscillation. -->
+  <compiler angle="radian" coordinate="local" autolimits="true"/>
+  <option timestep="0.001" gravity="0 0 0" integrator="implicitfast"/>
+
+  <visual>
+    <headlight diffuse="0 0 0" ambient="0.50 0.48 0.55" specular="0 0 0"/>
+    <rgba haze="0.94 0.91 0.90 1"/>
+    <global azimuth="120" elevation="-15" offwidth="1920" offheight="1080" fovy="44"/>
+    <quality shadowsize="8192" offsamples="8"/>
+    <map shadowclip="6" shadowscale="0.7"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="flat"
+             rgb1="0.74 0.68 0.86" rgb2="0.74 0.68 0.86"
+             width="512" height="512" mark="none" markrgb="0 0 0"/>
+    <material name="floor_mat" rgba="0.94 0.91 0.90 1" specular="0" shininess="0"/>
+    <material name="frame_wood" rgba="0.78 0.65 0.40 1" specular="0.12" shininess="0.15"/>
+    <material name="membrane_edge" rgba="0.22 0.32 0.52 1" specular="0.35" shininess="0.45"/>
+    <material name="membrane_interior" rgba="0.92 0.55 0.28 1" specular="0.45" shininess="0.55"/>
+    <material name="ref_plane" rgba="0.88 0.86 0.84 0.18" specular="0" shininess="0"/>
+  </asset>
+
+  <default>
+    <geom contype="0" conaffinity="0"/>
+  </default>
+
+  <worldbody>
+    <light pos="0 0 12" dir="-0.30 0.55 -1" directional="true" castshadow="true"
+           diffuse="0.85 0.82 0.78" specular="0.15 0.15 0.15"/>
+    <light pos="0 0 8" dir="0.40 -0.30 -1" directional="true" castshadow="false"
+           diffuse="0.28 0.28 0.34" specular="0 0 0"/>
+
+    <geom name="floor" type="plane" size="40 40 0.1" material="floor_mat"/>
+
+    <!-- Rest plane at equilibrium height z = 0.2. -->
+    <geom name="ref_plane" type="box" size="0.105 0.105 0.0005"
+          pos="0 0 0.2000" material="ref_plane"/>
+
+    <!-- Square frame marking fixed boundary. -->
+    <geom type="box" size="0.004 0.11 0.004" pos="0 -0.1000 0.1880" material="frame_wood"/>
+    <geom type="box" size="0.004 0.11 0.004" pos="0 0.0980 0.1880" material="frame_wood"/>
+    <geom type="box" size="0.11 0.004 0.004" pos="-0.1000 0 0.1880" material="frame_wood"/>
+    <geom type="box" size="0.11 0.004 0.004" pos="0.0980 0 0.1880" material="frame_wood"/>
+
+    <site name="s0_0" pos="-0.1000 -0.1000 0.2000" size="0.001"/>
+    <site name="s0_1" pos="-0.1000 -0.0780 0.2000" size="0.001"/>
+    <site name="s0_2" pos="-0.1000 -0.0560 0.2000" size="0.001"/>
+    <site name="s0_3" pos="-0.1000 -0.0340 0.2000" size="0.001"/>
+    <site name="s0_4" pos="-0.1000 -0.0120 0.2000" size="0.001"/>
+    <site name="s0_5" pos="-0.1000 0.0100 0.2000" size="0.001"/>
+    <site name="s0_6" pos="-0.1000 0.0320 0.2000" size="0.001"/>
+    <site name="s0_7" pos="-0.1000 0.0540 0.2000" size="0.001"/>
+    <site name="s0_8" pos="-0.1000 0.0760 0.2000" size="0.001"/>
+    <site name="s0_9" pos="-0.1000 0.0980 0.2000" size="0.001"/>
+    <site name="s1_0" pos="-0.0780 -0.1000 0.2000" size="0.001"/>
+    <site name="s1_9" pos="-0.0780 0.0980 0.2000" size="0.001"/>
+    <site name="s2_0" pos="-0.0560 -0.1000 0.2000" size="0.001"/>
+    <site name="s2_9" pos="-0.0560 0.0980 0.2000" size="0.001"/>
+    <site name="s3_0" pos="-0.0340 -0.1000 0.2000" size="0.001"/>
+    <site name="s3_9" pos="-0.0340 0.0980 0.2000" size="0.001"/>
+    <site name="s4_0" pos="-0.0120 -0.1000 0.2000" size="0.001"/>
+    <site name="s4_9" pos="-0.0120 0.0980 0.2000" size="0.001"/>
+    <site name="s5_0" pos="0.0100 -0.1000 0.2000" size="0.001"/>
+    <site name="s5_9" pos="0.0100 0.0980 0.2000" size="0.001"/>
+    <site name="s6_0" pos="0.0320 -0.1000 0.2000" size="0.001"/>
+    <site name="s6_9" pos="0.0320 0.0980 0.2000" size="0.001"/>
+    <site name="s7_0" pos="0.0540 -0.1000 0.2000" size="0.001"/>
+    <site name="s7_9" pos="0.0540 0.0980 0.2000" size="0.001"/>
+    <site name="s8_0" pos="0.0760 -0.1000 0.2000" size="0.001"/>
+    <site name="s8_9" pos="0.0760 0.0980 0.2000" size="0.001"/>
+    <site name="s9_0" pos="0.0980 -0.1000 0.2000" size="0.001"/>
+    <site name="s9_1" pos="0.0980 -0.0780 0.2000" size="0.001"/>
+    <site name="s9_2" pos="0.0980 -0.0560 0.2000" size="0.001"/>
+    <site name="s9_3" pos="0.0980 -0.0340 0.2000" size="0.001"/>
+    <site name="s9_4" pos="0.0980 -0.0120 0.2000" size="0.001"/>
+    <site name="s9_5" pos="0.0980 0.0100 0.2000" size="0.001"/>
+    <site name="s9_6" pos="0.0980 0.0320 0.2000" size="0.001"/>
+    <site name="s9_7" pos="0.0980 0.0540 0.2000" size="0.001"/>
+    <site name="s9_8" pos="0.0980 0.0760 0.2000" size="0.001"/>
+    <site name="s9_9" pos="0.0980 0.0980 0.2000" size="0.001"/>
+
+    <geom name="n0_0" type="sphere" pos="-0.1000 -0.1000 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n0_1" type="sphere" pos="-0.1000 -0.0780 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n0_2" type="sphere" pos="-0.1000 -0.0560 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n0_3" type="sphere" pos="-0.1000 -0.0340 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n0_4" type="sphere" pos="-0.1000 -0.0120 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n0_5" type="sphere" pos="-0.1000 0.0100 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n0_6" type="sphere" pos="-0.1000 0.0320 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n0_7" type="sphere" pos="-0.1000 0.0540 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n0_8" type="sphere" pos="-0.1000 0.0760 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n0_9" type="sphere" pos="-0.1000 0.0980 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n1_0" type="sphere" pos="-0.0780 -0.1000 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <body name="n1_1" pos="-0.0780 -0.0780 0.2000">
+      <joint name="z1_1" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s1_1" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n1_2" pos="-0.0780 -0.0560 0.2000">
+      <joint name="z1_2" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s1_2" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n1_3" pos="-0.0780 -0.0340 0.2000">
+      <joint name="z1_3" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s1_3" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n1_4" pos="-0.0780 -0.0120 0.2000">
+      <joint name="z1_4" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s1_4" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n1_5" pos="-0.0780 0.0100 0.2000">
+      <joint name="z1_5" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s1_5" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n1_6" pos="-0.0780 0.0320 0.2000">
+      <joint name="z1_6" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s1_6" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n1_7" pos="-0.0780 0.0540 0.2000">
+      <joint name="z1_7" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s1_7" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n1_8" pos="-0.0780 0.0760 0.2000">
+      <joint name="z1_8" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s1_8" pos="0 0 0" size="0.001"/>
+    </body>
+    <geom name="n1_9" type="sphere" pos="-0.0780 0.0980 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n2_0" type="sphere" pos="-0.0560 -0.1000 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <body name="n2_1" pos="-0.0560 -0.0780 0.2000">
+      <joint name="z2_1" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s2_1" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n2_2" pos="-0.0560 -0.0560 0.2000">
+      <joint name="z2_2" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s2_2" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n2_3" pos="-0.0560 -0.0340 0.2000">
+      <joint name="z2_3" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s2_3" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n2_4" pos="-0.0560 -0.0120 0.2000">
+      <joint name="z2_4" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s2_4" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n2_5" pos="-0.0560 0.0100 0.2000">
+      <joint name="z2_5" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s2_5" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n2_6" pos="-0.0560 0.0320 0.2000">
+      <joint name="z2_6" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s2_6" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n2_7" pos="-0.0560 0.0540 0.2000">
+      <joint name="z2_7" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s2_7" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n2_8" pos="-0.0560 0.0760 0.2000">
+      <joint name="z2_8" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s2_8" pos="0 0 0" size="0.001"/>
+    </body>
+    <geom name="n2_9" type="sphere" pos="-0.0560 0.0980 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n3_0" type="sphere" pos="-0.0340 -0.1000 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <body name="n3_1" pos="-0.0340 -0.0780 0.2000">
+      <joint name="z3_1" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s3_1" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n3_2" pos="-0.0340 -0.0560 0.2000">
+      <joint name="z3_2" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s3_2" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n3_3" pos="-0.0340 -0.0340 0.2000">
+      <joint name="z3_3" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s3_3" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n3_4" pos="-0.0340 -0.0120 0.2000">
+      <joint name="z3_4" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s3_4" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n3_5" pos="-0.0340 0.0100 0.2000">
+      <joint name="z3_5" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s3_5" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n3_6" pos="-0.0340 0.0320 0.2000">
+      <joint name="z3_6" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s3_6" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n3_7" pos="-0.0340 0.0540 0.2000">
+      <joint name="z3_7" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s3_7" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n3_8" pos="-0.0340 0.0760 0.2000">
+      <joint name="z3_8" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s3_8" pos="0 0 0" size="0.001"/>
+    </body>
+    <geom name="n3_9" type="sphere" pos="-0.0340 0.0980 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n4_0" type="sphere" pos="-0.0120 -0.1000 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <body name="n4_1" pos="-0.0120 -0.0780 0.2000">
+      <joint name="z4_1" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s4_1" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n4_2" pos="-0.0120 -0.0560 0.2000">
+      <joint name="z4_2" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s4_2" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n4_3" pos="-0.0120 -0.0340 0.2000">
+      <joint name="z4_3" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s4_3" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n4_4" pos="-0.0120 -0.0120 0.2000">
+      <joint name="z4_4" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s4_4" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n4_5" pos="-0.0120 0.0100 0.2000">
+      <joint name="z4_5" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s4_5" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n4_6" pos="-0.0120 0.0320 0.2000">
+      <joint name="z4_6" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s4_6" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n4_7" pos="-0.0120 0.0540 0.2000">
+      <joint name="z4_7" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s4_7" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n4_8" pos="-0.0120 0.0760 0.2000">
+      <joint name="z4_8" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s4_8" pos="0 0 0" size="0.001"/>
+    </body>
+    <geom name="n4_9" type="sphere" pos="-0.0120 0.0980 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n5_0" type="sphere" pos="0.0100 -0.1000 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <body name="n5_1" pos="0.0100 -0.0780 0.2000">
+      <joint name="z5_1" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s5_1" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n5_2" pos="0.0100 -0.0560 0.2000">
+      <joint name="z5_2" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s5_2" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n5_3" pos="0.0100 -0.0340 0.2000">
+      <joint name="z5_3" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s5_3" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n5_4" pos="0.0100 -0.0120 0.2000">
+      <joint name="z5_4" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s5_4" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n5_5" pos="0.0100 0.0100 0.2000">
+      <joint name="z5_5" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s5_5" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n5_6" pos="0.0100 0.0320 0.2000">
+      <joint name="z5_6" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s5_6" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n5_7" pos="0.0100 0.0540 0.2000">
+      <joint name="z5_7" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s5_7" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n5_8" pos="0.0100 0.0760 0.2000">
+      <joint name="z5_8" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s5_8" pos="0 0 0" size="0.001"/>
+    </body>
+    <geom name="n5_9" type="sphere" pos="0.0100 0.0980 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n6_0" type="sphere" pos="0.0320 -0.1000 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <body name="n6_1" pos="0.0320 -0.0780 0.2000">
+      <joint name="z6_1" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s6_1" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n6_2" pos="0.0320 -0.0560 0.2000">
+      <joint name="z6_2" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s6_2" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n6_3" pos="0.0320 -0.0340 0.2000">
+      <joint name="z6_3" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s6_3" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n6_4" pos="0.0320 -0.0120 0.2000">
+      <joint name="z6_4" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s6_4" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n6_5" pos="0.0320 0.0100 0.2000">
+      <joint name="z6_5" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s6_5" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n6_6" pos="0.0320 0.0320 0.2000">
+      <joint name="z6_6" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s6_6" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n6_7" pos="0.0320 0.0540 0.2000">
+      <joint name="z6_7" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s6_7" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n6_8" pos="0.0320 0.0760 0.2000">
+      <joint name="z6_8" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s6_8" pos="0 0 0" size="0.001"/>
+    </body>
+    <geom name="n6_9" type="sphere" pos="0.0320 0.0980 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n7_0" type="sphere" pos="0.0540 -0.1000 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <body name="n7_1" pos="0.0540 -0.0780 0.2000">
+      <joint name="z7_1" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s7_1" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n7_2" pos="0.0540 -0.0560 0.2000">
+      <joint name="z7_2" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s7_2" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n7_3" pos="0.0540 -0.0340 0.2000">
+      <joint name="z7_3" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s7_3" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n7_4" pos="0.0540 -0.0120 0.2000">
+      <joint name="z7_4" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s7_4" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n7_5" pos="0.0540 0.0100 0.2000">
+      <joint name="z7_5" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s7_5" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n7_6" pos="0.0540 0.0320 0.2000">
+      <joint name="z7_6" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s7_6" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n7_7" pos="0.0540 0.0540 0.2000">
+      <joint name="z7_7" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s7_7" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n7_8" pos="0.0540 0.0760 0.2000">
+      <joint name="z7_8" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s7_8" pos="0 0 0" size="0.001"/>
+    </body>
+    <geom name="n7_9" type="sphere" pos="0.0540 0.0980 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n8_0" type="sphere" pos="0.0760 -0.1000 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <body name="n8_1" pos="0.0760 -0.0780 0.2000">
+      <joint name="z8_1" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s8_1" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n8_2" pos="0.0760 -0.0560 0.2000">
+      <joint name="z8_2" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s8_2" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n8_3" pos="0.0760 -0.0340 0.2000">
+      <joint name="z8_3" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s8_3" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n8_4" pos="0.0760 -0.0120 0.2000">
+      <joint name="z8_4" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s8_4" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n8_5" pos="0.0760 0.0100 0.2000">
+      <joint name="z8_5" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s8_5" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n8_6" pos="0.0760 0.0320 0.2000">
+      <joint name="z8_6" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s8_6" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n8_7" pos="0.0760 0.0540 0.2000">
+      <joint name="z8_7" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s8_7" pos="0 0 0" size="0.001"/>
+    </body>
+    <body name="n8_8" pos="0.0760 0.0760 0.2000">
+      <joint name="z8_8" type="slide" axis="0 0 1"
+             stiffness="0.0" damping="0.008" range="-0.05 0.05"/>
+      <geom type="sphere" size="0.005" mass="0.005" material="membrane_interior" contype="0" conaffinity="0"/>
+      <site name="s8_8" pos="0 0 0" size="0.001"/>
+    </body>
+    <geom name="n8_9" type="sphere" pos="0.0760 0.0980 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n9_0" type="sphere" pos="0.0980 -0.1000 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n9_1" type="sphere" pos="0.0980 -0.0780 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n9_2" type="sphere" pos="0.0980 -0.0560 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n9_3" type="sphere" pos="0.0980 -0.0340 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n9_4" type="sphere" pos="0.0980 -0.0120 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n9_5" type="sphere" pos="0.0980 0.0100 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n9_6" type="sphere" pos="0.0980 0.0320 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n9_7" type="sphere" pos="0.0980 0.0540 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n9_8" type="sphere" pos="0.0980 0.0760 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+    <geom name="n9_9" type="sphere" pos="0.0980 0.0980 0.2000" size="0.005" mass="0.005" material="membrane_edge" contype="0" conaffinity="0"/>
+
+    <camera name="cam" pos="0.238 -0.240 0.354" fovy="44"
+            xyaxes="0.7071 0.7071 -0.0000   -0.3786 0.3786 0.8446"/>
+  </worldbody>
+
+  <tendon>
+    <spatial name="k_0_0_1_0" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_0"/>
+      <site site="s1_0"/>
+    </spatial>
+    <spatial name="k_0_0_0_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_0"/>
+      <site site="s0_1"/>
+    </spatial>
+    <spatial name="k_0_1_1_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_1"/>
+      <site site="s1_1"/>
+    </spatial>
+    <spatial name="k_0_1_0_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_1"/>
+      <site site="s0_2"/>
+    </spatial>
+    <spatial name="k_0_2_1_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_2"/>
+      <site site="s1_2"/>
+    </spatial>
+    <spatial name="k_0_2_0_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_2"/>
+      <site site="s0_3"/>
+    </spatial>
+    <spatial name="k_0_3_1_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_3"/>
+      <site site="s1_3"/>
+    </spatial>
+    <spatial name="k_0_3_0_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_3"/>
+      <site site="s0_4"/>
+    </spatial>
+    <spatial name="k_0_4_1_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_4"/>
+      <site site="s1_4"/>
+    </spatial>
+    <spatial name="k_0_4_0_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_4"/>
+      <site site="s0_5"/>
+    </spatial>
+    <spatial name="k_0_5_1_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_5"/>
+      <site site="s1_5"/>
+    </spatial>
+    <spatial name="k_0_5_0_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_5"/>
+      <site site="s0_6"/>
+    </spatial>
+    <spatial name="k_0_6_1_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_6"/>
+      <site site="s1_6"/>
+    </spatial>
+    <spatial name="k_0_6_0_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_6"/>
+      <site site="s0_7"/>
+    </spatial>
+    <spatial name="k_0_7_1_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_7"/>
+      <site site="s1_7"/>
+    </spatial>
+    <spatial name="k_0_7_0_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_7"/>
+      <site site="s0_8"/>
+    </spatial>
+    <spatial name="k_0_8_1_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_8"/>
+      <site site="s1_8"/>
+    </spatial>
+    <spatial name="k_0_8_0_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_8"/>
+      <site site="s0_9"/>
+    </spatial>
+    <spatial name="k_0_9_1_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s0_9"/>
+      <site site="s1_9"/>
+    </spatial>
+    <spatial name="k_1_0_2_0" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_0"/>
+      <site site="s2_0"/>
+    </spatial>
+    <spatial name="k_1_0_1_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_0"/>
+      <site site="s1_1"/>
+    </spatial>
+    <spatial name="k_1_1_2_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_1"/>
+      <site site="s2_1"/>
+    </spatial>
+    <spatial name="k_1_1_1_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_1"/>
+      <site site="s1_2"/>
+    </spatial>
+    <spatial name="k_1_2_2_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_2"/>
+      <site site="s2_2"/>
+    </spatial>
+    <spatial name="k_1_2_1_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_2"/>
+      <site site="s1_3"/>
+    </spatial>
+    <spatial name="k_1_3_2_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_3"/>
+      <site site="s2_3"/>
+    </spatial>
+    <spatial name="k_1_3_1_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_3"/>
+      <site site="s1_4"/>
+    </spatial>
+    <spatial name="k_1_4_2_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_4"/>
+      <site site="s2_4"/>
+    </spatial>
+    <spatial name="k_1_4_1_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_4"/>
+      <site site="s1_5"/>
+    </spatial>
+    <spatial name="k_1_5_2_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_5"/>
+      <site site="s2_5"/>
+    </spatial>
+    <spatial name="k_1_5_1_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_5"/>
+      <site site="s1_6"/>
+    </spatial>
+    <spatial name="k_1_6_2_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_6"/>
+      <site site="s2_6"/>
+    </spatial>
+    <spatial name="k_1_6_1_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_6"/>
+      <site site="s1_7"/>
+    </spatial>
+    <spatial name="k_1_7_2_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_7"/>
+      <site site="s2_7"/>
+    </spatial>
+    <spatial name="k_1_7_1_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_7"/>
+      <site site="s1_8"/>
+    </spatial>
+    <spatial name="k_1_8_2_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_8"/>
+      <site site="s2_8"/>
+    </spatial>
+    <spatial name="k_1_8_1_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_8"/>
+      <site site="s1_9"/>
+    </spatial>
+    <spatial name="k_1_9_2_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s1_9"/>
+      <site site="s2_9"/>
+    </spatial>
+    <spatial name="k_2_0_3_0" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_0"/>
+      <site site="s3_0"/>
+    </spatial>
+    <spatial name="k_2_0_2_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_0"/>
+      <site site="s2_1"/>
+    </spatial>
+    <spatial name="k_2_1_3_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_1"/>
+      <site site="s3_1"/>
+    </spatial>
+    <spatial name="k_2_1_2_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_1"/>
+      <site site="s2_2"/>
+    </spatial>
+    <spatial name="k_2_2_3_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_2"/>
+      <site site="s3_2"/>
+    </spatial>
+    <spatial name="k_2_2_2_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_2"/>
+      <site site="s2_3"/>
+    </spatial>
+    <spatial name="k_2_3_3_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_3"/>
+      <site site="s3_3"/>
+    </spatial>
+    <spatial name="k_2_3_2_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_3"/>
+      <site site="s2_4"/>
+    </spatial>
+    <spatial name="k_2_4_3_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_4"/>
+      <site site="s3_4"/>
+    </spatial>
+    <spatial name="k_2_4_2_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_4"/>
+      <site site="s2_5"/>
+    </spatial>
+    <spatial name="k_2_5_3_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_5"/>
+      <site site="s3_5"/>
+    </spatial>
+    <spatial name="k_2_5_2_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_5"/>
+      <site site="s2_6"/>
+    </spatial>
+    <spatial name="k_2_6_3_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_6"/>
+      <site site="s3_6"/>
+    </spatial>
+    <spatial name="k_2_6_2_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_6"/>
+      <site site="s2_7"/>
+    </spatial>
+    <spatial name="k_2_7_3_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_7"/>
+      <site site="s3_7"/>
+    </spatial>
+    <spatial name="k_2_7_2_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_7"/>
+      <site site="s2_8"/>
+    </spatial>
+    <spatial name="k_2_8_3_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_8"/>
+      <site site="s3_8"/>
+    </spatial>
+    <spatial name="k_2_8_2_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_8"/>
+      <site site="s2_9"/>
+    </spatial>
+    <spatial name="k_2_9_3_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s2_9"/>
+      <site site="s3_9"/>
+    </spatial>
+    <spatial name="k_3_0_4_0" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_0"/>
+      <site site="s4_0"/>
+    </spatial>
+    <spatial name="k_3_0_3_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_0"/>
+      <site site="s3_1"/>
+    </spatial>
+    <spatial name="k_3_1_4_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_1"/>
+      <site site="s4_1"/>
+    </spatial>
+    <spatial name="k_3_1_3_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_1"/>
+      <site site="s3_2"/>
+    </spatial>
+    <spatial name="k_3_2_4_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_2"/>
+      <site site="s4_2"/>
+    </spatial>
+    <spatial name="k_3_2_3_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_2"/>
+      <site site="s3_3"/>
+    </spatial>
+    <spatial name="k_3_3_4_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_3"/>
+      <site site="s4_3"/>
+    </spatial>
+    <spatial name="k_3_3_3_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_3"/>
+      <site site="s3_4"/>
+    </spatial>
+    <spatial name="k_3_4_4_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_4"/>
+      <site site="s4_4"/>
+    </spatial>
+    <spatial name="k_3_4_3_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_4"/>
+      <site site="s3_5"/>
+    </spatial>
+    <spatial name="k_3_5_4_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_5"/>
+      <site site="s4_5"/>
+    </spatial>
+    <spatial name="k_3_5_3_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_5"/>
+      <site site="s3_6"/>
+    </spatial>
+    <spatial name="k_3_6_4_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_6"/>
+      <site site="s4_6"/>
+    </spatial>
+    <spatial name="k_3_6_3_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_6"/>
+      <site site="s3_7"/>
+    </spatial>
+    <spatial name="k_3_7_4_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_7"/>
+      <site site="s4_7"/>
+    </spatial>
+    <spatial name="k_3_7_3_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_7"/>
+      <site site="s3_8"/>
+    </spatial>
+    <spatial name="k_3_8_4_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_8"/>
+      <site site="s4_8"/>
+    </spatial>
+    <spatial name="k_3_8_3_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_8"/>
+      <site site="s3_9"/>
+    </spatial>
+    <spatial name="k_3_9_4_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s3_9"/>
+      <site site="s4_9"/>
+    </spatial>
+    <spatial name="k_4_0_5_0" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_0"/>
+      <site site="s5_0"/>
+    </spatial>
+    <spatial name="k_4_0_4_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_0"/>
+      <site site="s4_1"/>
+    </spatial>
+    <spatial name="k_4_1_5_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_1"/>
+      <site site="s5_1"/>
+    </spatial>
+    <spatial name="k_4_1_4_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_1"/>
+      <site site="s4_2"/>
+    </spatial>
+    <spatial name="k_4_2_5_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_2"/>
+      <site site="s5_2"/>
+    </spatial>
+    <spatial name="k_4_2_4_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_2"/>
+      <site site="s4_3"/>
+    </spatial>
+    <spatial name="k_4_3_5_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_3"/>
+      <site site="s5_3"/>
+    </spatial>
+    <spatial name="k_4_3_4_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_3"/>
+      <site site="s4_4"/>
+    </spatial>
+    <spatial name="k_4_4_5_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_4"/>
+      <site site="s5_4"/>
+    </spatial>
+    <spatial name="k_4_4_4_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_4"/>
+      <site site="s4_5"/>
+    </spatial>
+    <spatial name="k_4_5_5_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_5"/>
+      <site site="s5_5"/>
+    </spatial>
+    <spatial name="k_4_5_4_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_5"/>
+      <site site="s4_6"/>
+    </spatial>
+    <spatial name="k_4_6_5_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_6"/>
+      <site site="s5_6"/>
+    </spatial>
+    <spatial name="k_4_6_4_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_6"/>
+      <site site="s4_7"/>
+    </spatial>
+    <spatial name="k_4_7_5_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_7"/>
+      <site site="s5_7"/>
+    </spatial>
+    <spatial name="k_4_7_4_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_7"/>
+      <site site="s4_8"/>
+    </spatial>
+    <spatial name="k_4_8_5_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_8"/>
+      <site site="s5_8"/>
+    </spatial>
+    <spatial name="k_4_8_4_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_8"/>
+      <site site="s4_9"/>
+    </spatial>
+    <spatial name="k_4_9_5_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s4_9"/>
+      <site site="s5_9"/>
+    </spatial>
+    <spatial name="k_5_0_6_0" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_0"/>
+      <site site="s6_0"/>
+    </spatial>
+    <spatial name="k_5_0_5_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_0"/>
+      <site site="s5_1"/>
+    </spatial>
+    <spatial name="k_5_1_6_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_1"/>
+      <site site="s6_1"/>
+    </spatial>
+    <spatial name="k_5_1_5_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_1"/>
+      <site site="s5_2"/>
+    </spatial>
+    <spatial name="k_5_2_6_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_2"/>
+      <site site="s6_2"/>
+    </spatial>
+    <spatial name="k_5_2_5_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_2"/>
+      <site site="s5_3"/>
+    </spatial>
+    <spatial name="k_5_3_6_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_3"/>
+      <site site="s6_3"/>
+    </spatial>
+    <spatial name="k_5_3_5_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_3"/>
+      <site site="s5_4"/>
+    </spatial>
+    <spatial name="k_5_4_6_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_4"/>
+      <site site="s6_4"/>
+    </spatial>
+    <spatial name="k_5_4_5_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_4"/>
+      <site site="s5_5"/>
+    </spatial>
+    <spatial name="k_5_5_6_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_5"/>
+      <site site="s6_5"/>
+    </spatial>
+    <spatial name="k_5_5_5_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_5"/>
+      <site site="s5_6"/>
+    </spatial>
+    <spatial name="k_5_6_6_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_6"/>
+      <site site="s6_6"/>
+    </spatial>
+    <spatial name="k_5_6_5_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_6"/>
+      <site site="s5_7"/>
+    </spatial>
+    <spatial name="k_5_7_6_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_7"/>
+      <site site="s6_7"/>
+    </spatial>
+    <spatial name="k_5_7_5_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_7"/>
+      <site site="s5_8"/>
+    </spatial>
+    <spatial name="k_5_8_6_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_8"/>
+      <site site="s6_8"/>
+    </spatial>
+    <spatial name="k_5_8_5_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_8"/>
+      <site site="s5_9"/>
+    </spatial>
+    <spatial name="k_5_9_6_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s5_9"/>
+      <site site="s6_9"/>
+    </spatial>
+    <spatial name="k_6_0_7_0" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_0"/>
+      <site site="s7_0"/>
+    </spatial>
+    <spatial name="k_6_0_6_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_0"/>
+      <site site="s6_1"/>
+    </spatial>
+    <spatial name="k_6_1_7_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_1"/>
+      <site site="s7_1"/>
+    </spatial>
+    <spatial name="k_6_1_6_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_1"/>
+      <site site="s6_2"/>
+    </spatial>
+    <spatial name="k_6_2_7_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_2"/>
+      <site site="s7_2"/>
+    </spatial>
+    <spatial name="k_6_2_6_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_2"/>
+      <site site="s6_3"/>
+    </spatial>
+    <spatial name="k_6_3_7_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_3"/>
+      <site site="s7_3"/>
+    </spatial>
+    <spatial name="k_6_3_6_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_3"/>
+      <site site="s6_4"/>
+    </spatial>
+    <spatial name="k_6_4_7_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_4"/>
+      <site site="s7_4"/>
+    </spatial>
+    <spatial name="k_6_4_6_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_4"/>
+      <site site="s6_5"/>
+    </spatial>
+    <spatial name="k_6_5_7_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_5"/>
+      <site site="s7_5"/>
+    </spatial>
+    <spatial name="k_6_5_6_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_5"/>
+      <site site="s6_6"/>
+    </spatial>
+    <spatial name="k_6_6_7_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_6"/>
+      <site site="s7_6"/>
+    </spatial>
+    <spatial name="k_6_6_6_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_6"/>
+      <site site="s6_7"/>
+    </spatial>
+    <spatial name="k_6_7_7_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_7"/>
+      <site site="s7_7"/>
+    </spatial>
+    <spatial name="k_6_7_6_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_7"/>
+      <site site="s6_8"/>
+    </spatial>
+    <spatial name="k_6_8_7_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_8"/>
+      <site site="s7_8"/>
+    </spatial>
+    <spatial name="k_6_8_6_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_8"/>
+      <site site="s6_9"/>
+    </spatial>
+    <spatial name="k_6_9_7_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s6_9"/>
+      <site site="s7_9"/>
+    </spatial>
+    <spatial name="k_7_0_8_0" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_0"/>
+      <site site="s8_0"/>
+    </spatial>
+    <spatial name="k_7_0_7_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_0"/>
+      <site site="s7_1"/>
+    </spatial>
+    <spatial name="k_7_1_8_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_1"/>
+      <site site="s8_1"/>
+    </spatial>
+    <spatial name="k_7_1_7_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_1"/>
+      <site site="s7_2"/>
+    </spatial>
+    <spatial name="k_7_2_8_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_2"/>
+      <site site="s8_2"/>
+    </spatial>
+    <spatial name="k_7_2_7_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_2"/>
+      <site site="s7_3"/>
+    </spatial>
+    <spatial name="k_7_3_8_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_3"/>
+      <site site="s8_3"/>
+    </spatial>
+    <spatial name="k_7_3_7_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_3"/>
+      <site site="s7_4"/>
+    </spatial>
+    <spatial name="k_7_4_8_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_4"/>
+      <site site="s8_4"/>
+    </spatial>
+    <spatial name="k_7_4_7_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_4"/>
+      <site site="s7_5"/>
+    </spatial>
+    <spatial name="k_7_5_8_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_5"/>
+      <site site="s8_5"/>
+    </spatial>
+    <spatial name="k_7_5_7_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_5"/>
+      <site site="s7_6"/>
+    </spatial>
+    <spatial name="k_7_6_8_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_6"/>
+      <site site="s8_6"/>
+    </spatial>
+    <spatial name="k_7_6_7_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_6"/>
+      <site site="s7_7"/>
+    </spatial>
+    <spatial name="k_7_7_8_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_7"/>
+      <site site="s8_7"/>
+    </spatial>
+    <spatial name="k_7_7_7_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_7"/>
+      <site site="s7_8"/>
+    </spatial>
+    <spatial name="k_7_8_8_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_8"/>
+      <site site="s8_8"/>
+    </spatial>
+    <spatial name="k_7_8_7_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_8"/>
+      <site site="s7_9"/>
+    </spatial>
+    <spatial name="k_7_9_8_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s7_9"/>
+      <site site="s8_9"/>
+    </spatial>
+    <spatial name="k_8_0_9_0" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_0"/>
+      <site site="s9_0"/>
+    </spatial>
+    <spatial name="k_8_0_8_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_0"/>
+      <site site="s8_1"/>
+    </spatial>
+    <spatial name="k_8_1_9_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_1"/>
+      <site site="s9_1"/>
+    </spatial>
+    <spatial name="k_8_1_8_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_1"/>
+      <site site="s8_2"/>
+    </spatial>
+    <spatial name="k_8_2_9_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_2"/>
+      <site site="s9_2"/>
+    </spatial>
+    <spatial name="k_8_2_8_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_2"/>
+      <site site="s8_3"/>
+    </spatial>
+    <spatial name="k_8_3_9_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_3"/>
+      <site site="s9_3"/>
+    </spatial>
+    <spatial name="k_8_3_8_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_3"/>
+      <site site="s8_4"/>
+    </spatial>
+    <spatial name="k_8_4_9_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_4"/>
+      <site site="s9_4"/>
+    </spatial>
+    <spatial name="k_8_4_8_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_4"/>
+      <site site="s8_5"/>
+    </spatial>
+    <spatial name="k_8_5_9_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_5"/>
+      <site site="s9_5"/>
+    </spatial>
+    <spatial name="k_8_5_8_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_5"/>
+      <site site="s8_6"/>
+    </spatial>
+    <spatial name="k_8_6_9_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_6"/>
+      <site site="s9_6"/>
+    </spatial>
+    <spatial name="k_8_6_8_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_6"/>
+      <site site="s8_7"/>
+    </spatial>
+    <spatial name="k_8_7_9_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_7"/>
+      <site site="s9_7"/>
+    </spatial>
+    <spatial name="k_8_7_8_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_7"/>
+      <site site="s8_8"/>
+    </spatial>
+    <spatial name="k_8_8_9_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_8"/>
+      <site site="s9_8"/>
+    </spatial>
+    <spatial name="k_8_8_8_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_8"/>
+      <site site="s8_9"/>
+    </spatial>
+    <spatial name="k_8_9_9_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s8_9"/>
+      <site site="s9_9"/>
+    </spatial>
+    <spatial name="k_9_0_9_1" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s9_0"/>
+      <site site="s9_1"/>
+    </spatial>
+    <spatial name="k_9_1_9_2" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s9_1"/>
+      <site site="s9_2"/>
+    </spatial>
+    <spatial name="k_9_2_9_3" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s9_2"/>
+      <site site="s9_3"/>
+    </spatial>
+    <spatial name="k_9_3_9_4" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s9_3"/>
+      <site site="s9_4"/>
+    </spatial>
+    <spatial name="k_9_4_9_5" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s9_4"/>
+      <site site="s9_5"/>
+    </spatial>
+    <spatial name="k_9_5_9_6" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s9_5"/>
+      <site site="s9_6"/>
+    </spatial>
+    <spatial name="k_9_6_9_7" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s9_6"/>
+      <site site="s9_7"/>
+    </spatial>
+    <spatial name="k_9_7_9_8" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s9_7"/>
+      <site site="s9_8"/>
+    </spatial>
+    <spatial name="k_9_8_9_9" stiffness="30.0" damping="0.012" springlength="0.02200" width="0.0012" rgba="0.45 0.42 0.40 0.50" limited="false">
+      <site site="s9_8"/>
+      <site site="s9_9"/>
+    </spatial>
+  </tendon>
+</mujoco>

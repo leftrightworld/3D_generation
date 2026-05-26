@@ -1,0 +1,100 @@
+<mujoco model="crane_lifting_simple">
+  <!-- Single rigid crane: base+pole+arm+cable+load on one body, hinged at
+       front-bottom edge (x=0,z=0). Tips forward (+x load side) when
+       loadWeight*armExtension > baseWeight*baseHalfWidth.
+       Render WITHOUT --kinematic (see gen_crane_lifting_simple.py). -->
+  <compiler angle="radian" coordinate="local" autolimits="true"/>
+  <option timestep="0.001" gravity="0 0 -9.81" integrator="implicitfast"
+          impratio="3" cone="elliptic"/>
+
+  <visual>
+    <headlight diffuse="0 0 0" ambient="0.50 0.48 0.55" specular="0 0 0"/>
+    <rgba haze="0.94 0.91 0.90 1"/>
+    <global azimuth="120" elevation="-15" offwidth="1920" offheight="1080" fovy="32"/>
+    <quality shadowsize="8192" offsamples="8"/>
+    <map shadowclip="6" shadowscale="0.7"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="flat"
+             rgb1="0.74 0.68 0.86" rgb2="0.74 0.68 0.86"
+             width="512" height="512" mark="none" markrgb="0 0 0"/>
+    <material name="floor_mat" rgba="0.94 0.91 0.90 1" specular="0" shininess="0"/>
+    <material name="wood" rgba="0.93 0.72 0.48 1" specular="0.12" shininess="0.12"/>
+    <material name="wood_dark" rgba="0.82 0.55 0.32 1" specular="0.12" shininess="0.12"/>
+    <material name="cable_mat" rgba="0.28 0.25 0.22 1" specular="0" shininess="0"/>
+    <material name="load_mat" rgba="0.78 0.22 0.20 1" specular="0.35" shininess="0.4"/>
+  </asset>
+
+  <default>
+    <geom friction="0.6 0.04 0.005" solref="0.003 1" solimp="0.97 0.99 0.001"/>
+  </default>
+
+  <worldbody>
+    <light pos="0 0 10" dir="-0.30 0.55 -1" directional="true" castshadow="true"
+           diffuse="0.85 0.82 0.78" specular="0.15 0.15 0.15"/>
+    <light pos="0 0 6" dir="0.40 -0.30 -1" directional="true" castshadow="false"
+           diffuse="0.28 0.28 0.34" specular="0 0 0"/>
+
+    <geom name="floor" type="plane" size="40 40 0.1" material="floor_mat"/>
+
+    <!-- Fixed support-region marker (base half-width behind pivot) -->
+    <geom name="support_marker" type="box" pos="-0.1300 0 0.003"
+          size="0.1300 0.16 0.003"
+          rgba="0.35 0.68 0.78 0.55" contype="0" conaffinity="0"/>
+    <geom name="support_tick" type="box" pos="-0.2600 0 0.006"
+          size="0.012 0.12 0.006" rgba="0.30 0.62 0.72 0.85"
+          contype="0" conaffinity="0"/>
+
+    <!-- Pivot at front-bottom edge: x=0, z=0 -->
+    <body name="crane" pos="0 0 0">
+      <joint name="tip" type="hinge" axis="0 1 0"
+             damping="22.0" armature="12.0"
+             limited="true" range="0 0.458837"/>
+
+      <geom name="base" type="box"
+            size="0.2600 0.1400 0.0550"
+            pos="-0.2600 0 0.0550"
+            material="wood_dark" mass="0.1300"
+            contype="0" conaffinity="0"/>
+
+      <geom name="pole" type="box"
+            size="0.0450 0.0450 0.5200"
+            pos="-0.2000 0 0.6300"
+            material="wood" mass="0.10"
+            contype="0" conaffinity="0"/>
+
+      <geom name="arm" type="box"
+            size="0.5600 0.0380 0.0380"
+            pos="0.3600 0 1.1500"
+            material="wood" mass="0.08"
+            contype="0" conaffinity="0"/>
+
+      <geom name="cable" type="capsule"
+            fromto="0.9200 0 1.1500 0.9200 0 0.7300"
+            size="0.006" material="cable_mat"
+            contype="0" conaffinity="0"/>
+
+      <geom name="load" type="box"
+            size="0.1100 0.1100 0.1100"
+            pos="0.9200 0 0.6200"
+            material="load_mat" mass="1.0000"
+            friction="0.9 0.05 0.005" solref="0.003 1" solimp="0.97 0.99 0.001"/>
+
+      <geom name="tq_0" type="capsule" fromto="0.0000 0.0000 0.1300 0.0204 0.0000 0.1312" size="0.009" rgba="0.88 0.28 0.24 0.88" contype="0" conaffinity="0"/>
+      <geom name="tq_1" type="capsule" fromto="0.0204 0.0000 0.1312 0.0405 0.0000 0.1346" size="0.009" rgba="0.88 0.28 0.24 0.88" contype="0" conaffinity="0"/>
+      <geom name="tq_2" type="capsule" fromto="0.0405 0.0000 0.1346 0.0601 0.0000 0.1403" size="0.009" rgba="0.88 0.28 0.24 0.88" contype="0" conaffinity="0"/>
+      <geom name="tq_3" type="capsule" fromto="0.0601 0.0000 0.1403 0.0789 0.0000 0.1482" size="0.009" rgba="0.88 0.28 0.24 0.88" contype="0" conaffinity="0"/>
+      <geom name="tq_4" type="capsule" fromto="0.0789 0.0000 0.1482 0.0967 0.0000 0.1582" size="0.009" rgba="0.88 0.28 0.24 0.88" contype="0" conaffinity="0"/>
+      <geom name="tq_5" type="capsule" fromto="0.0967 0.0000 0.1582 0.1133 0.0000 0.1701" size="0.009" rgba="0.88 0.28 0.24 0.88" contype="0" conaffinity="0"/>
+      <geom name="tq_6" type="capsule" fromto="0.1133 0.0000 0.1701 0.1284 0.0000 0.1838" size="0.009" rgba="0.88 0.28 0.24 0.88" contype="0" conaffinity="0"/>
+      <geom name="tq_7" type="capsule" fromto="0.1284 0.0000 0.1838 0.1418 0.0000 0.1992" size="0.009" rgba="0.88 0.28 0.24 0.88" contype="0" conaffinity="0"/>
+      <geom name="tq_8" type="capsule" fromto="0.1418 0.0000 0.1992 0.1535 0.0000 0.2160" size="0.009" rgba="0.88 0.28 0.24 0.88" contype="0" conaffinity="0"/>
+      <geom name="tq_head" type="sphere" pos="0.1535 0.0000 0.2160" size="0.018" rgba="0.88 0.28 0.24 0.88" contype="0" conaffinity="0"/>
+
+    </body>
+
+    <camera name="cam" pos="0.45 -4.0 0.88"
+            fovy="32" xyaxes="1 0 0   0 0 1"/>
+  </worldbody>
+</mujoco>

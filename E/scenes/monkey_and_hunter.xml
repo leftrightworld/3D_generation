@@ -1,0 +1,145 @@
+<mujoco model="monkey_and_hunter">
+  <!-- Three parallel monkey-and-hunter demos: different dart speeds, same local geometry.
+       Regenerate: python3 scenes/gen_monkey_and_hunter.py
+       Render init-qvel: scenes/monkey_and_hunter_qvel.txt -->
+  <!-- Scene A speed = 2.85 m/s -->
+  <!-- Scene B speed = 3.50 m/s -->
+  <!-- Scene C speed = 5.20 m/s -->
+  <compiler angle="radian" coordinate="local" autolimits="true"/>
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="implicitfast"
+          impratio="3" cone="elliptic"/>
+
+  <visual>
+    <headlight diffuse="0 0 0" ambient="0.50 0.48 0.55" specular="0 0 0"/>
+    <rgba haze="0.94 0.91 0.90 1"/>
+    <global azimuth="120" elevation="-15" offwidth="1920" offheight="1080" fovy="38"/>
+    <quality shadowsize="8192" offsamples="8"/>
+    <map shadowclip="6" shadowscale="0.7"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="flat"
+             rgb1="0.74 0.68 0.86" rgb2="0.74 0.68 0.86"
+             width="512" height="512" mark="none" markrgb="0 0 0"/>
+    <material name="floor_mat" rgba="0.94 0.91 0.90 1" specular="0" shininess="0"/>
+    <material name="wood" rgba="0.93 0.82 0.58 1" specular="0.1" shininess="0.1"/>
+    <material name="wood_dark" rgba="0.78 0.65 0.40 1" specular="0.1" shininess="0.1"/>
+    <material name="dart_slow" rgba="0.55 0.72 0.92 1" specular="0.35" shininess="0.4"/>
+    <material name="dart_med" rgba="0.30 0.50 0.78 1" specular="0.35" shininess="0.4"/>
+    <material name="dart_fast" rgba="0.12 0.28 0.55 1" specular="0.35" shininess="0.4"/>
+    <material name="bob_red" rgba="0.86 0.34 0.30 1" specular="0.35" shininess="0.4"/>
+    <material name="marker_mat" rgba="0.28 0.27 0.26 1" specular="0.1" shininess="0.1"/>
+  </asset>
+
+  <default>
+    <geom friction="0.7 0.04 0.001" solref="0.005 1" solimp="0.95 0.99 0.001"/>
+  </default>
+
+  <worldbody>
+    <light pos="0 0 12" dir="-0.30 0.55 -1" directional="true" castshadow="true"
+           diffuse="0.85 0.82 0.78" specular="0.15 0.15 0.15"/>
+    <light pos="0 0 8" dir="0.40 -0.30 -1" directional="true" castshadow="false"
+           diffuse="0.28 0.28 0.34" specular="0 0 0"/>
+
+    <geom name="floor" type="plane" size="40 40 0.1" material="floor_mat"/>
+
+    <!-- Scene A (A slow): speed=2.85 m/s
+         dart qvel linear=(2.2552, 0.0000, 1.7426) |q|=2.85
+         aim: local monkey (1.00,0.80) from local muzzle (0.12,0.12) -->
+    <geom name="cannon_base_0" type="box"
+          pos="-0.0600 0.0000 0.0250"
+          size="0.06 0.05 0.025"
+          material="wood_dark" contype="0" conaffinity="0"/>
+    <geom name="cannon_barrel_0" type="box"
+          pos="0.0844 0.0000 0.0925"
+          euler="0 0.657889 0"
+          size="0.1 0.035 0.035"
+          material="wood" contype="0" conaffinity="0"/>
+    <geom name="aim_line_0" type="capsule"
+          fromto="0.1200 0.0000 0.1200 1.0000 0.0000 0.8000"
+          size="0.004" rgba="0.55 0.72 0.55 0.35"
+          contype="0" conaffinity="0"/>
+    <geom name="release_marker_0" type="sphere"
+          pos="1.0000 0.0000 0.8000" size="0.012"
+          material="marker_mat" contype="0" conaffinity="0"/>
+
+    <body name="dart_0" pos="0.1200 0.0000 0.1200">
+      <joint name="dart_free_0" type="free"/>
+      <geom name="dart_geom_0" type="sphere" size="0.032"
+            mass="0.08" material="dart_slow"/>
+    </body>
+
+    <body name="monkey_0" pos="1.0000 0.0000 0.8000">
+      <joint name="monkey_free_0" type="free"/>
+      <geom name="monkey_geom_0" type="sphere" size="0.04"
+            mass="0.10" material="bob_red"/>
+    </body>
+
+    <!-- Scene B (B medium): speed=3.50 m/s
+         dart qvel linear=(2.7695, 0.0000, 2.1401) |q|=3.50
+         aim: local monkey (1.00,0.80) from local muzzle (0.12,0.12) -->
+    <geom name="cannon_base_1" type="box"
+          pos="1.9400 0.0000 0.0250"
+          size="0.06 0.05 0.025"
+          material="wood_dark" contype="0" conaffinity="0"/>
+    <geom name="cannon_barrel_1" type="box"
+          pos="2.0844 0.0000 0.0925"
+          euler="0 0.657889 0"
+          size="0.1 0.035 0.035"
+          material="wood" contype="0" conaffinity="0"/>
+    <geom name="aim_line_1" type="capsule"
+          fromto="2.1200 0.0000 0.1200 3.0000 0.0000 0.8000"
+          size="0.004" rgba="0.55 0.72 0.55 0.35"
+          contype="0" conaffinity="0"/>
+    <geom name="release_marker_1" type="sphere"
+          pos="3.0000 0.0000 0.8000" size="0.012"
+          material="marker_mat" contype="0" conaffinity="0"/>
+
+    <body name="dart_1" pos="2.1200 0.0000 0.1200">
+      <joint name="dart_free_1" type="free"/>
+      <geom name="dart_geom_1" type="sphere" size="0.032"
+            mass="0.08" material="dart_med"/>
+    </body>
+
+    <body name="monkey_1" pos="3.0000 0.0000 0.8000">
+      <joint name="monkey_free_1" type="free"/>
+      <geom name="monkey_geom_1" type="sphere" size="0.04"
+            mass="0.10" material="bob_red"/>
+    </body>
+
+    <!-- Scene C (C fast): speed=5.20 m/s
+         dart qvel linear=(4.1147, 0.0000, 3.1795) |q|=5.20
+         aim: local monkey (1.00,0.80) from local muzzle (0.12,0.12) -->
+    <geom name="cannon_base_2" type="box"
+          pos="3.9400 0.0000 0.0250"
+          size="0.06 0.05 0.025"
+          material="wood_dark" contype="0" conaffinity="0"/>
+    <geom name="cannon_barrel_2" type="box"
+          pos="4.0844 0.0000 0.0925"
+          euler="0 0.657889 0"
+          size="0.1 0.035 0.035"
+          material="wood" contype="0" conaffinity="0"/>
+    <geom name="aim_line_2" type="capsule"
+          fromto="4.1200 0.0000 0.1200 5.0000 0.0000 0.8000"
+          size="0.004" rgba="0.55 0.72 0.55 0.35"
+          contype="0" conaffinity="0"/>
+    <geom name="release_marker_2" type="sphere"
+          pos="5.0000 0.0000 0.8000" size="0.012"
+          material="marker_mat" contype="0" conaffinity="0"/>
+
+    <body name="dart_2" pos="4.1200 0.0000 0.1200">
+      <joint name="dart_free_2" type="free"/>
+      <geom name="dart_geom_2" type="sphere" size="0.032"
+            mass="0.08" material="dart_fast"/>
+    </body>
+
+    <body name="monkey_2" pos="5.0000 0.0000 0.8000">
+      <joint name="monkey_free_2" type="free"/>
+      <geom name="monkey_geom_2" type="sphere" size="0.04"
+            mass="0.10" material="bob_red"/>
+    </body>
+
+    <camera name="cam" pos="2.5000 -4.5000 0.4600" fovy="38"
+            xyaxes="1.000 0.000 0.000   0.000 0.000 1.000"/>
+  </worldbody>
+</mujoco>

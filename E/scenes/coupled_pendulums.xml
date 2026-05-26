@@ -1,0 +1,94 @@
+<mujoco model="coupled_pendulums">
+  <!-- Two equal-length pendulums hung from the same bar, with a soft spring
+       connecting their bobs.  Bob 1 starts displaced; the spring slowly
+       transfers its swing energy to bob 2, then back.  This is the classic
+       beat / normal-modes demo.
+
+       Single-pendulum freq:  omega+ = sqrt(g/L)             (in-phase mode)
+       Coupled-mode freq:     omega- = sqrt(g/L + 2k/m)      (out-of-phase)
+       Beat period: 2*pi / (omega- - omega+)
+
+       With L=0.6, m=0.10, beat-target T_beat = ~10 s:
+         omega+ = 4.04 rad/s
+         omega- - omega+ = 0.63 rad/s  ->  omega- = 4.67
+         k = 0.5 * m * (omega-^2 - omega+^2) = 0.5 * 0.10 * (21.8 - 16.3)
+           = 0.275 N/m. -->
+  <compiler angle="radian" coordinate="local" autolimits="true"/>
+  <option timestep="0.001" gravity="0 0 -9.81" integrator="implicitfast"/>
+
+  <visual>
+    <headlight diffuse="0 0 0" ambient="0.50 0.48 0.55" specular="0 0 0"/>
+    <rgba haze="0.94 0.91 0.90 1"/>
+    <global azimuth="120" elevation="-12" offwidth="1920" offheight="1080" fovy="38"/>
+    <quality shadowsize="8192" offsamples="8"/>
+    <map shadowclip="5" shadowscale="0.7"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="flat"
+             rgb1="0.74 0.68 0.86" rgb2="0.74 0.68 0.86"
+             width="512" height="512" mark="none" markrgb="0 0 0"/>
+    <material name="floor_mat"   rgba="0.94 0.91 0.90 1" specular="0" shininess="0"/>
+    <material name="frame_wood"  rgba="0.78 0.65 0.40 1" specular="0.12" shininess="0.15"/>
+    <material name="rod_mat"     rgba="0.30 0.27 0.24 1" specular="0" shininess="0"/>
+    <material name="bob_a"       rgba="0.86 0.34 0.30 1" specular="0.4" shininess="0.55"/>
+    <material name="bob_b"       rgba="0.30 0.50 0.78 1" specular="0.4" shininess="0.55"/>
+    <material name="spring_mat"  rgba="0.55 0.55 0.58 1" specular="0.6" shininess="0.7"/>
+  </asset>
+
+  <worldbody>
+    <light pos="0 0 12" dir="-0.30 0.55 -1" directional="true" castshadow="true"
+           diffuse="0.85 0.82 0.78" specular="0.15 0.15 0.15"/>
+    <light pos="0 0 8" dir="0.40 -0.30 -1" directional="true" castshadow="false"
+           diffuse="0.28 0.28 0.34" specular="0 0 0"/>
+
+    <geom name="floor" type="plane" size="40 40 0.1" material="floor_mat"/>
+
+    <!-- Wooden stand: two posts + horizontal bar. -->
+    <geom type="box" size="0.035 0.035 1.10"
+          pos="-0.45 0 1.10" material="frame_wood"/>
+    <geom type="box" size="0.035 0.035 1.10"
+          pos=" 0.45 0 1.10" material="frame_wood"/>
+    <geom type="capsule" fromto="-0.45 0 2.20  0.45 0 2.20"
+          size="0.018" material="frame_wood"/>
+
+    <!-- Pendulum A: hinge at x=-0.20, swings in y-z plane (axis along +x). -->
+    <body name="pendA" pos="-0.20 0 2.20">
+      <joint name="jA" type="hinge" axis="1 0 0" damping="0.0006"/>
+      <geom type="capsule" fromto="0 0 0  0 0 -0.60" size="0.005"
+            material="rod_mat" contype="0" conaffinity="0"/>
+      <geom name="bobA" type="sphere" pos="0 0 -0.60" size="0.040" mass="0.10"
+            material="bob_a" contype="0" conaffinity="0"/>
+      <!-- Site at the bob center for the coupling spring. -->
+      <site name="sA" pos="0 0 -0.60" size="0.001"/>
+    </body>
+
+    <!-- Pendulum B: hinge at x=+0.20.  Same length and mass. -->
+    <body name="pendB" pos="0.20 0 2.20">
+      <joint name="jB" type="hinge" axis="1 0 0" damping="0.0006"/>
+      <geom type="capsule" fromto="0 0 0  0 0 -0.60" size="0.005"
+            material="rod_mat" contype="0" conaffinity="0"/>
+      <geom name="bobB" type="sphere" pos="0 0 -0.60" size="0.040" mass="0.10"
+            material="bob_b" contype="0" conaffinity="0"/>
+      <site name="sB" pos="0 0 -0.60" size="0.001"/>
+    </body>
+  </worldbody>
+
+  <!-- Coupling spring: tendon between the two bob sites.  Natural length =
+       0.40 (the rest separation), gentle stiffness, light damping. -->
+  <tendon>
+    <spatial name="spring" stiffness="0.275" springlength="0.40"
+             damping="0.005" width="0.0025" rgba="0.55 0.55 0.58 0.9">
+      <site site="sA"/>
+      <site site="sB"/>
+    </spatial>
+  </tendon>
+
+  <worldbody>
+    <!-- Camera: 3/4 view from front-right.  Spring axis (x) reads at an
+         angle so we see depth; the swing (y) projects partly to screen
+         horizontal AND screen vertical, making the energy transfer clear. -->
+    <camera name="cam" pos="1.6 -2.4 1.40" fovy="40"
+            xyaxes="0.832 0.555 0   0 0 1"/>
+  </worldbody>
+</mujoco>

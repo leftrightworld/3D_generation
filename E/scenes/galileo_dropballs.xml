@@ -1,0 +1,79 @@
+<mujoco model="galileo_dropballs">
+  <!-- Galileo's free-fall demo.  Four spheres of widely different masses
+       (0.01 to 5 kg) and sizes, dropped from the same height simultaneously.
+       MuJoCo doesn't simulate aero drag by default, so they all fall at rate
+       g and hit the floor at (nearly) the same instant — the tiny remaining
+       difference is purely because larger balls have a shorter free fall (the
+       bottom of the larger ball is closer to the floor at release). -->
+  <compiler angle="radian" coordinate="local" autolimits="true"/>
+  <option timestep="0.001" gravity="0 0 -9.81" integrator="implicitfast"
+          impratio="3" cone="elliptic"/>
+
+  <visual>
+    <headlight diffuse="0 0 0" ambient="0.50 0.48 0.55" specular="0 0 0"/>
+    <rgba haze="0.94 0.91 0.90 1"/>
+    <global azimuth="120" elevation="-15" offwidth="1920" offheight="1080" fovy="46"/>
+    <quality shadowsize="8192" offsamples="8"/>
+    <map shadowclip="6" shadowscale="0.7"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="flat"
+             rgb1="0.74 0.68 0.86" rgb2="0.74 0.68 0.86"
+             width="512" height="512" mark="none" markrgb="0 0 0"/>
+    <material name="floor_mat"   rgba="0.94 0.91 0.90 1" specular="0" shininess="0"/>
+    <material name="tower_wood"  rgba="0.78 0.65 0.40 1" specular="0.15" shininess="0.2"/>
+    <material name="ball_red"    rgba="0.86 0.32 0.30 1" specular="0.4" shininess="0.55"/>
+    <material name="ball_yellow" rgba="0.92 0.78 0.36 1" specular="0.4" shininess="0.55"/>
+    <material name="ball_blue"   rgba="0.30 0.50 0.78 1" specular="0.4" shininess="0.55"/>
+    <material name="ball_green"  rgba="0.48 0.68 0.42 1" specular="0.4" shininess="0.55"/>
+  </asset>
+
+  <default>
+    <geom friction="0.5 0.02 0.001" solref="0.005 1" solimp="0.95 0.99 0.001"/>
+  </default>
+
+  <worldbody>
+    <light pos="0 0 12" dir="-0.30 0.55 -1" directional="true" castshadow="true"
+           diffuse="0.85 0.82 0.78" specular="0.15 0.15 0.15"/>
+    <light pos="0 0 8" dir="0.40 -0.30 -1" directional="true" castshadow="false"
+           diffuse="0.28 0.28 0.34" specular="0 0 0"/>
+
+    <geom name="floor" type="plane" size="40 40 0.1" material="floor_mat"/>
+
+    <!-- A tall thin marker post behind the balls (does not interact, just
+         a visual reference for the release height).  Mounted off-axis in y
+         so it doesn't obstruct the camera view of the falling balls. -->
+    <geom type="capsule" fromto="0 0.45 0   0 0.45 2.10" size="0.022"
+          material="tower_wood"/>
+    <geom type="box" size="0.20 0.20 0.025"
+          pos="0 0.45 0.025" material="tower_wood"/>
+    <!-- Cross-bar at release height (just visual). -->
+    <geom type="capsule" fromto="-0.85 0.45 2.05   0.85 0.45 2.05"
+          size="0.018" material="tower_wood"/>
+
+    <!-- 4 balls, all CENTERED at z=2.00, at the same instant in time.  No
+         platform — they're in vacuum at t=0 and start free-falling
+         immediately under gravity. -->
+    <body name="ball1" pos="-0.62 0 2.00">
+      <freejoint/>
+      <geom type="sphere" size="0.040" mass="0.01" material="ball_red"/>
+    </body>
+    <body name="ball2" pos="-0.22 0 2.00">
+      <freejoint/>
+      <geom type="sphere" size="0.060" mass="0.20" material="ball_yellow"/>
+    </body>
+    <body name="ball3" pos="0.20 0 2.00">
+      <freejoint/>
+      <geom type="sphere" size="0.080" mass="1.00" material="ball_blue"/>
+    </body>
+    <body name="ball4" pos="0.66 0 2.00">
+      <freejoint/>
+      <geom type="sphere" size="0.100" mass="5.00" material="ball_green"/>
+    </body>
+
+    <!-- Camera: side view, framing the entire drop from release down to floor. -->
+    <camera name="cam" pos="0 -2.90 1.10" fovy="50"
+            xyaxes="1 0 0   0 0 1"/>
+  </worldbody>
+</mujoco>

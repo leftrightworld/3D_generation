@@ -1,0 +1,69 @@
+<mujoco model="pendulum_scene">
+  <compiler angle="radian" coordinate="local" autolimits="true"/>
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="implicitfast"/>
+
+  <visual>
+    <headlight diffuse="0 0 0" ambient="0.50 0.48 0.55" specular="0 0 0"/>
+    <!-- haze = horizon band color; match it to the floor so the seam disappears -->
+    <rgba haze="0.94 0.91 0.90 1"/>
+    <global azimuth="120" elevation="-15" offwidth="1920" offheight="1080" fovy="40"/>
+    <quality shadowsize="8192" offsamples="8"/>
+    <map shadowclip="5" shadowscale="0.7"/>
+  </visual>
+
+  <asset>
+    <!-- Skybox: FLAT (uniform color), avoids the wavy gradient band at the horizon.
+         Clean horizon line = sky (purple) meets floor (cream). -->
+    <texture type="skybox" builtin="flat"
+             rgb1="0.74 0.68 0.86" rgb2="0.74 0.68 0.86"
+             width="512" height="512"
+             mark="none" markrgb="0 0 0"/>
+
+    <!-- Floor: flat soft cream, no texture (cleaner than checker) -->
+    <material name="floor_mat" rgba="0.94 0.91 0.90 1"
+              reflectance="0.0" specular="0.0" shininess="0.0"/>
+
+    <material name="wood" rgba="0.93 0.82 0.58 1" specular="0.1" shininess="0.1"/>
+    <material name="bob_yellow" rgba="0.96 0.83 0.36 1" specular="0.35" shininess="0.4"/>
+    <material name="ball_peach" rgba="0.95 0.72 0.62 1" specular="0.3" shininess="0.35"/>
+    <material name="string_mat" rgba="0.28 0.25 0.22 1" specular="0.0" shininess="0.0"/>
+  </asset>
+
+  <worldbody>
+    <!-- Key light: from upper-left-front -->
+    <light pos="0 0 10" dir="-0.35 0.55 -1" directional="true" castshadow="true"
+           diffuse="0.85 0.82 0.78" specular="0.15 0.15 0.15"/>
+    <!-- Soft fill from opposite side, no shadow -->
+    <light pos="0 0 6" dir="0.45 -0.3 -1" directional="true" castshadow="false"
+           diffuse="0.30 0.30 0.36" specular="0 0 0"/>
+
+    <!-- Big floor (horizon will be off-frame) -->
+    <geom name="floor" type="plane" size="40 40 0.1" material="floor_mat"/>
+
+    <!-- L-shaped stand (matches the paper):
+         one vertical post at the back, one horizontal arm extending forward -->
+    <!-- Vertical post -->
+    <geom type="box" size="0.045 0.045 1.05"
+          pos="0 0.55 1.05" material="wood"/>
+    <!-- Horizontal arm extending toward camera, from post top to hinge -->
+    <geom type="box" size="0.045 0.65 0.045"
+          pos="0 -0.10 2.05" material="wood"/>
+
+    <!-- Pendulum hung from the END of the horizontal arm (at y=-0.75) -->
+    <body name="pendulum" pos="0 -0.75 2.005">
+      <joint name="hinge" type="hinge" axis="0 1 0" pos="0 0 0" damping="0.015"/>
+      <geom name="string" type="capsule"
+            fromto="0 0 0  0 0 -1.1" size="0.005"
+            material="string_mat" contype="0" conaffinity="0"/>
+      <geom name="bob" type="sphere" pos="0 0 -1.1" size="0.115"
+            material="bob_yellow" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Decorative small ball on the ground -->
+    <geom type="sphere" pos="0.95 -0.5 0.085" size="0.085" material="ball_peach"/>
+
+    <!-- Camera: 3/4 view from front-right -->
+    <camera name="cam" pos="3.0 -3.3 1.9"
+            xyaxes="0.74 0.67 0   -0.20 0.22 0.95"/>
+  </worldbody>
+</mujoco>

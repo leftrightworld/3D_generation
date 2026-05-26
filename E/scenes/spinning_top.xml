@@ -1,0 +1,82 @@
+<mujoco model="spinning_top">
+  <!-- A heavy disc top spinning fast on its tip.  Initial axis is tilted 15
+       degrees from vertical; gravity provides a horizontal torque about the
+       tip; the large spin angular momentum redirects that torque into steady
+       precession about the world vertical axis. -->
+  <compiler angle="radian" coordinate="local" autolimits="true"/>
+  <option timestep="0.0005" gravity="0 0 -9.81" integrator="implicitfast"
+          impratio="3" cone="elliptic"/>
+
+  <visual>
+    <headlight diffuse="0 0 0" ambient="0.50 0.48 0.55" specular="0 0 0"/>
+    <rgba haze="0.94 0.91 0.90 1"/>
+    <global azimuth="120" elevation="-15" offwidth="1920" offheight="1080" fovy="40"/>
+    <quality shadowsize="8192" offsamples="8"/>
+    <map shadowclip="6" shadowscale="0.7"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="flat"
+             rgb1="0.74 0.68 0.86" rgb2="0.74 0.68 0.86"
+             width="512" height="512" mark="none" markrgb="0 0 0"/>
+
+    <material name="floor_mat" rgba="0.94 0.91 0.90 1" specular="0" shininess="0"/>
+    <material name="disc_brass" rgba="0.90 0.74 0.36 1" specular="0.7" shininess="0.85"/>
+    <material name="disc_rim"   rgba="0.70 0.55 0.20 1" specular="0.7" shininess="0.85"/>
+    <material name="stem_dark"  rgba="0.30 0.27 0.24 1" specular="0.5" shininess="0.6"/>
+    <material name="tip_steel"  rgba="0.55 0.55 0.58 1" specular="0.7" shininess="0.8"/>
+  </asset>
+
+  <default>
+    <!-- Very stiff contact at the tip so the top doesn't sink into the floor
+         and precession isn't damped by squishy contact. -->
+    <geom solref="0.001 1" solimp="0.99 0.999 0.0001"/>
+  </default>
+
+  <worldbody>
+    <light pos="0 0 12" dir="-0.30 0.55 -1" directional="true" castshadow="true"
+           diffuse="0.85 0.82 0.78" specular="0.15 0.15 0.15"/>
+    <light pos="0 0 8" dir="0.40 -0.30 -1" directional="true" castshadow="false"
+           diffuse="0.28 0.28 0.34" specular="0 0 0"/>
+
+    <geom name="floor" type="plane" size="40 40 0.1" material="floor_mat"
+          friction="0.6 0.05 0.001"/>
+
+    <!-- Top: body origin = the contact tip.  All geoms extend upward in body
+         frame; tilt is applied via the free-joint initial quaternion.  Disc
+         is mounted ~9 cm above the tip so that at moderate nutation the
+         disc edge stays clear of the floor (no z<0 clipping). -->
+    <body name="top" pos="0 0 0.001">
+      <joint name="top_free" type="free"/>
+
+      <!-- Tip: small hard sphere.  Sliding friction needs to be HIGH so the
+           tip stays in place under precession (otherwise the spinning
+           contact "drills" the top across the floor).  Torsional and rolling
+           friction stay low so the spin angular momentum isn't bled off. -->
+      <geom name="tip" type="sphere" pos="0 0 0.004" size="0.004"
+            mass="0.002" material="tip_steel"
+            friction="1.5 0.003 0.0005"/>
+
+      <!-- Stem from tip up to the disc.  Disc center @ z=0.075 — high enough
+           that the rim clears the floor up to ~30 deg nutation. -->
+      <geom name="stem_lower" type="capsule" fromto="0 0 0.008  0 0 0.062"
+            size="0.005" mass="0.005" material="stem_dark"
+            contype="0" conaffinity="0"/>
+
+      <!-- Disc: most of the polar moment.  Larger I_z helps stability. -->
+      <geom name="disc" type="cylinder" pos="0 0 0.075" size="0.055 0.013"
+            mass="0.080" material="disc_brass"
+            contype="0" conaffinity="0"/>
+
+      <!-- Crown stem above the disc. -->
+      <geom name="crown" type="capsule" fromto="0 0 0.090  0 0 0.118"
+            size="0.0035" mass="0.002" material="stem_dark"
+            contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Camera: 3/4 view looking slightly down on the top, so we can see both
+         the spin axis tilt and the precession sweep. -->
+    <camera name="cam" pos="0.55 -0.75 0.22" fovy="36"
+            xyaxes="0.806 0.592 0   -0.092 0.126 0.987"/>
+  </worldbody>
+</mujoco>

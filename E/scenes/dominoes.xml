@@ -1,0 +1,130 @@
+<mujoco model="dominoes">
+  <compiler angle="radian" coordinate="local" autolimits="true"/>
+  <option timestep="0.001" gravity="0 0 -9.81" integrator="implicitfast"
+          impratio="3" cone="elliptic"/>
+
+  <visual>
+    <headlight diffuse="0 0 0" ambient="0.50 0.48 0.55" specular="0 0 0"/>
+    <rgba haze="0.94 0.91 0.90 1"/>
+    <global azimuth="120" elevation="-15" offwidth="1920" offheight="1080" fovy="36"/>
+    <quality shadowsize="8192" offsamples="8"/>
+    <map shadowclip="6" shadowscale="0.7"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="flat"
+             rgb1="0.74 0.68 0.86" rgb2="0.74 0.68 0.86"
+             width="512" height="512" mark="none" markrgb="0 0 0"/>
+    <material name="floor_mat" rgba="0.94 0.91 0.90 1" specular="0" shininess="0"/>
+    <material name="dom_cream" rgba="0.96 0.92 0.85 1" specular="0.15" shininess="0.2"/>
+    <material name="dom_peach" rgba="0.95 0.78 0.62 1" specular="0.15" shininess="0.2"/>
+    <material name="dom_blue"  rgba="0.36 0.58 0.82 1" specular="0.25" shininess="0.3"/>
+    <material name="dom_dark"  rgba="0.32 0.30 0.32 1" specular="0.25" shininess="0.3"/>
+  </asset>
+
+  <default>
+    <geom friction="0.7 0.04 0.001" solref="0.005 1" solimp="0.95 0.99 0.001"/>
+  </default>
+
+  <worldbody>
+    <light pos="0 0 12" dir="-0.30 0.55 -1" directional="true" castshadow="true"
+           diffuse="0.85 0.82 0.78" specular="0.15 0.15 0.15"/>
+    <light pos="0 0 8" dir="0.40 -0.30 -1" directional="true" castshadow="false"
+           diffuse="0.28 0.28 0.34" specular="0 0 0"/>
+
+    <geom name="floor" type="plane" size="40 40 0.1" material="floor_mat"/>
+
+    <body name="d0" pos="-0.4500 0 0.0450" quat="0.99619 0 0.08716 0">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_cream"/>
+    </body>
+    <body name="d1" pos="-0.4100 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_peach"/>
+    </body>
+    <body name="d2" pos="-0.3700 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_blue"/>
+    </body>
+    <body name="d3" pos="-0.3300 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_dark"/>
+    </body>
+    <body name="d4" pos="-0.2900 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_cream"/>
+    </body>
+    <body name="d5" pos="-0.2500 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_peach"/>
+    </body>
+    <body name="d6" pos="-0.2100 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_blue"/>
+    </body>
+    <body name="d7" pos="-0.1700 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_dark"/>
+    </body>
+    <body name="d8" pos="-0.1300 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_cream"/>
+    </body>
+    <body name="d9" pos="-0.0900 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_peach"/>
+    </body>
+    <body name="d10" pos="-0.0500 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_blue"/>
+    </body>
+    <body name="d11" pos="-0.0100 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_dark"/>
+    </body>
+    <body name="d12" pos="0.0300 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_cream"/>
+    </body>
+    <body name="d13" pos="0.0700 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_peach"/>
+    </body>
+    <body name="d14" pos="0.1100 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_blue"/>
+    </body>
+    <body name="d15" pos="0.1500 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_dark"/>
+    </body>
+    <body name="d16" pos="0.1900 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_cream"/>
+    </body>
+    <body name="d17" pos="0.2300 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_peach"/>
+    </body>
+    <body name="d18" pos="0.2700 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_blue"/>
+    </body>
+    <body name="d19" pos="0.3100 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_dark"/>
+    </body>
+    <body name="d20" pos="0.3500 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_cream"/>
+    </body>
+    <body name="d21" pos="0.3900 0 0.0450">
+      <joint type="free"/>
+      <geom type="box" size="0.006 0.018 0.045" mass="0.025" material="dom_peach"/>
+    </body>
+
+    <!-- Camera: a low 3/4 view along the line of dominoes -->
+    <camera name="cam" pos="-0.95 -0.85 0.30" fovy="42"
+            xyaxes="0.65 -0.76 0   0.16 0.14 0.978"/>
+  </worldbody>
+</mujoco>

@@ -1,0 +1,79 @@
+<mujoco model="bicycle_wheel_gyroscope">
+  <!-- BACKLOG: ω=60 rad/s, Ω≈2.94 rad/s (MgL/Iω), 5 s, ≥½ precession revolution.
+       Pose driven each frame from elapsed t (continuous, no mj_step jitter):
+         precessionAngle = Ω·t   pivot quat about +Z
+         spinAngle       = ω·t   hinge qpos about axle (+Y)
+       Render:
+         python3 render.py --scene scenes/bicycle_wheel_gyroscope.xml \\
+           --out out/new_scenes/bicycle_wheel_gyroscope.mp4 --duration 5 \\
+           --kinematic --spin-rate 60 --precession-rate 2.943 --fps 60 -->
+  <compiler angle="radian" coordinate="local" autolimits="true"/>
+  <option timestep="0.0005" gravity="0 0 -9.81" integrator="implicitfast"
+          impratio="3" cone="elliptic"/>
+
+  <visual>
+    <headlight diffuse="0 0 0" ambient="0.50 0.48 0.55" specular="0 0 0"/>
+    <rgba haze="0.94 0.91 0.90 1"/>
+    <global azimuth="120" elevation="-15" offwidth="1920" offheight="1080" fovy="38"/>
+    <quality shadowsize="8192" offsamples="8"/>
+    <map shadowclip="6" shadowscale="0.7"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="flat"
+             rgb1="0.74 0.68 0.86" rgb2="0.74 0.68 0.86"
+             width="512" height="512" mark="none" markrgb="0 0 0"/>
+    <material name="floor_mat" rgba="0.94 0.91 0.90 1" specular="0" shininess="0"/>
+    <material name="wood_dark" rgba="0.78 0.65 0.40 1" specular="0.1" shininess="0.1"/>
+    <material name="brass" rgba="0.90 0.74 0.36 1" specular="0.7" shininess="0.85"/>
+    <material name="axle_mat" rgba="0.30 0.28 0.30 1" specular="0.5" shininess="0.6"/>
+    <material name="string_mat" rgba="0.20 0.18 0.15 1" specular="0" shininess="0"/>
+  </asset>
+
+  <default>
+    <geom solref="0.001 1" solimp="0.99 0.999 0.0001"/>
+  </default>
+
+  <worldbody>
+    <light pos="0 0 12" dir="-0.30 0.55 -1" directional="true" castshadow="true"
+           diffuse="0.85 0.82 0.78" specular="0.15 0.15 0.15"/>
+    <light pos="0 0 8" dir="0.40 -0.30 -1" directional="true" castshadow="false"
+           diffuse="0.28 0.28 0.34" specular="0 0 0"/>
+
+    <geom name="floor" type="plane" size="40 40 0.1" material="floor_mat"/>
+
+    <!-- Ceiling mount: bottom face at z=1.00, centered on the hook point. -->
+    <geom name="ceiling_block" type="box" pos="0.09 -0.09 1.02" size="0.06 0.06 0.02"
+          material="wood_dark"/>
+
+    <!-- Fixed hook at underside of block; string stub meets block with no gap. -->
+    <body name="pivot" pos="0.09 -0.09 1.00">
+      <joint name="pivot" type="ball" damping="0"/>
+
+      <geom name="hook_stub" type="cylinder" fromto="0 0 0  0 0 0.02"
+            size="0.005" material="wood_dark" contype="0" conaffinity="0"/>
+
+      <geom name="string" type="capsule"
+            fromto="0 0 0.02  0 0.09 -0.4"
+            size="0.0007" mass="0.001" material="string_mat"
+            contype="0" conaffinity="0"/>
+
+      <body name="gyro" pos="0 0.09 -0.4">
+        <joint name="spin" type="hinge" axis="0 1 0" damping="0"/>
+        <geom name="disc" type="cylinder" fromto="0 -0.0075 0  0 0.0075 0"
+              size="0.10" material="brass" mass="0.50"
+              contype="0" conaffinity="0"/>
+        <!-- Rim mark: makes spin visible at video frame rate. -->
+        <geom name="spin_mark" type="sphere" pos="0.095 0 0" size="0.006"
+              material="axle_mat" mass="0"
+              contype="0" conaffinity="0"/>
+        <geom name="axle" type="cylinder" fromto="0 -0.09 0  0 0.09 0"
+              size="0.006" material="axle_mat" mass="0.02"
+              contype="0" conaffinity="0"/>
+      </body>
+    </body>
+
+    <camera name="cam" pos="1.2 -0.5 0.7" fovy="38"
+            xyaxes="0.578 0.816 0   -0.024 0.017 1.000"/>
+  </worldbody>
+</mujoco>

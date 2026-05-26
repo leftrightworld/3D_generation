@@ -1,0 +1,112 @@
+<mujoco model="rolling_race">
+  <!-- Four bodies (same mass, same outer radius) race down a 20-deg ramp.
+       Their moments of inertia I/MR^2 differ, so their accelerations down
+       the slope differ:
+           a / (g sin theta) = 1 / (1 + I/(MR^2))
+       solid sphere :  I/MR^2 = 2/5    -> 5/7  g sin theta   (fastest)
+       solid disk   :  I/MR^2 = 1/2    -> 2/3  g sin theta
+       hollow sphere:  I/MR^2 = 2/3    -> 3/5  g sin theta
+       thin ring    :  I/MR^2 = 1      -> 1/2  g sin theta   (slowest)
+
+       MuJoCo auto-computes inertia from geom for the solid sphere and solid
+       disk; for the hollow sphere and the ring, we override via <inertial>. -->
+  <compiler angle="radian" coordinate="local" autolimits="true"/>
+  <option timestep="0.001" gravity="0 0 -9.81" integrator="implicitfast"
+          impratio="3" cone="elliptic"/>
+
+  <visual>
+    <headlight diffuse="0 0 0" ambient="0.50 0.48 0.55" specular="0 0 0"/>
+    <rgba haze="0.94 0.91 0.90 1"/>
+    <global azimuth="120" elevation="-15" offwidth="1920" offheight="1080" fovy="36"/>
+    <quality shadowsize="8192" offsamples="8"/>
+    <map shadowclip="6" shadowscale="0.7"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="flat"
+             rgb1="0.74 0.68 0.86" rgb2="0.74 0.68 0.86"
+             width="512" height="512" mark="none" markrgb="0 0 0"/>
+
+    <material name="floor_mat"   rgba="0.94 0.91 0.90 1" specular="0" shininess="0"/>
+    <material name="ramp_wood"   rgba="0.93 0.82 0.58 1" specular="0.12" shininess="0.15"/>
+    <material name="ramp_wood_d" rgba="0.78 0.65 0.40 1" specular="0.12" shininess="0.15"/>
+    <material name="solid_red"   rgba="0.86 0.32 0.30 1" specular="0.4" shininess="0.55"/>
+    <material name="hollow_blue" rgba="0.36 0.50 0.78 1" specular="0.4" shininess="0.55"/>
+    <material name="disk_yellow" rgba="0.92 0.78 0.36 1" specular="0.4" shininess="0.55"/>
+    <material name="ring_green"  rgba="0.48 0.68 0.42 1" specular="0.4" shininess="0.55"/>
+  </asset>
+
+  <default>
+    <!-- Friction high enough for pure rolling on the 20-deg slope.  Minimum
+         for the ring (the hardest to roll without slipping) is mu = tan(20)/2
+         ~ 0.18; we use 0.5. -->
+    <geom friction="0.5 0.02 0.001" solref="0.005 1" solimp="0.95 0.99 0.001"/>
+  </default>
+
+  <worldbody>
+    <light pos="0 0 12" dir="-0.30 0.55 -1" directional="true" castshadow="true"
+           diffuse="0.85 0.82 0.78" specular="0.15 0.15 0.15"/>
+    <light pos="0 0 8" dir="0.40 -0.30 -1" directional="true" castshadow="false"
+           diffuse="0.28 0.28 0.34" specular="0 0 0"/>
+
+    <geom name="floor" type="plane" size="40 40 0.1" material="floor_mat"/>
+
+    <!-- Ramp: 2 m long along its body +x, 1.2 m wide in body +y, 0.05 m thick.
+         Rotated +20 deg about world +y so body +x slopes downward to the
+         world +x direction.  Lane dividers attached as children inherit the
+         rotation, sticking up perpendicular to the ramp surface. -->
+    <body name="ramp" pos="0.940 0 0.342" euler="0 0.349 0">
+      <geom name="ramp_surface" type="box" size="1.0 0.6 0.025"
+            material="ramp_wood"/>
+      <geom name="div_neg" type="box" pos="0 -0.30 0.045"
+            size="1.0 0.005 0.020" material="ramp_wood_d"/>
+      <geom name="div_mid" type="box" pos="0  0    0.045"
+            size="1.0 0.005 0.020" material="ramp_wood_d"/>
+      <geom name="div_pos" type="box" pos="0  0.30 0.045"
+            size="1.0 0.005 0.020" material="ramp_wood_d"/>
+      <!-- Stopper at the bottom (body +x edge): tall enough to catch the
+           rolling objects (ball radius is 0.05 above the ramp surface, so
+           stopper top needs to be well above that). -->
+      <geom name="stopper" type="box" pos="0.99 0 0.085"
+            size="0.01 0.6 0.060" material="ramp_wood_d"/>
+    </body>
+
+    <!-- Lane 1 (y=-0.45): solid sphere.  MuJoCo computes I = (2/5)mR^2. -->
+    <body name="solid_sphere" pos="0.026 -0.45 0.755">
+      <freejoint/>
+      <geom type="sphere" size="0.05" mass="0.10" material="solid_red"/>
+    </body>
+
+    <!-- Lane 2 (y=-0.15): hollow sphere.  Same visual sphere, but I overridden
+         to (2/3)mR^2 = 1.667e-4. -->
+    <body name="hollow_sphere" pos="0.026 -0.15 0.755">
+      <freejoint/>
+      <inertial pos="0 0 0" mass="0.10"
+                diaginertia="1.667e-4 1.667e-4 1.667e-4"/>
+      <geom type="sphere" size="0.05" mass="0" material="hollow_blue"/>
+    </body>
+
+    <!-- Lane 3 (y=+0.15): solid disk (a short cylinder rolling on its lateral
+         surface).  Body quat rotates the cylinder so its symmetry axis (body
+         +z) aligns with world -y, i.e. the axle is horizontal across the
+         ramp.  I auto-computed. -->
+    <body name="solid_disk" pos="0.026 0.15 0.755" quat="0.7071 0.7071 0 0">
+      <freejoint/>
+      <geom type="cylinder" size="0.05 0.015" mass="0.10" material="disk_yellow"/>
+    </body>
+
+    <!-- Lane 4 (y=+0.45): thin ring / hoop.  Same cylinder shape; I overridden
+         so I_axial = mR^2, I_diam = (1/2)mR^2 (i.e. inertia of a thin hoop). -->
+    <body name="ring" pos="0.026 0.45 0.755" quat="0.7071 0.7071 0 0">
+      <freejoint/>
+      <inertial pos="0 0 0" mass="0.10"
+                diaginertia="1.25e-4 1.25e-4 2.5e-4"/>
+      <geom type="cylinder" size="0.05 0.012" mass="0" material="ring_green"/>
+    </body>
+
+    <!-- Camera: front-low side view so we see all 4 lanes side by side
+         AND the slope of the ramp.  Look-at the middle of the ramp surface. -->
+    <camera name="cam" pos="1.05 -2.55 1.05" fovy="38"
+            xyaxes="1.000 0.024 0   -0.006 0.255 0.967"/>
+  </worldbody>
+</mujoco>

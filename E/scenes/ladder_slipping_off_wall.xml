@@ -1,0 +1,55 @@
+<mujoco model="ladder_slipping_off_wall">
+  <!-- A 1.2 m ladder leans at 60° against a vertical wall (x = 0.5).
+       Low floor friction (mu = 0.15) lets the foot slip outward and the top
+       slide down the wall. -->
+  <compiler angle="radian" coordinate="local" autolimits="true"/>
+  <option timestep="0.001" gravity="0 0 -9.81" integrator="implicitfast"
+          impratio="3" cone="elliptic"/>
+
+  <visual>
+    <headlight diffuse="0 0 0" ambient="0.50 0.48 0.55" specular="0 0 0"/>
+    <rgba haze="0.94 0.91 0.90 1"/>
+    <global azimuth="120" elevation="-15" offwidth="1920" offheight="1080" fovy="38"/>
+    <quality shadowsize="8192" offsamples="8"/>
+    <map shadowclip="6" shadowscale="0.7"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="flat"
+             rgb1="0.74 0.68 0.86" rgb2="0.74 0.68 0.86"
+             width="512" height="512" mark="none" markrgb="0 0 0"/>
+
+    <material name="floor_mat" rgba="0.94 0.91 0.90 1" specular="0" shininess="0"/>
+    <material name="wall_mat" rgba="0.96 0.92 0.85 1" specular="0.05" shininess="0.05"/>
+    <material name="ladder_mat" rgba="0.78 0.65 0.40 1" specular="0.1" shininess="0.15"/>
+  </asset>
+
+  <worldbody>
+    <light pos="0 0 12" dir="-0.30 0.55 -1" directional="true" castshadow="true"
+           diffuse="0.85 0.82 0.78" specular="0.15 0.15 0.15"/>
+    <light pos="0 0 8" dir="0.40 -0.30 -1" directional="true" castshadow="false"
+           diffuse="0.28 0.28 0.34" specular="0 0 0"/>
+
+    <!-- Low-friction floor -->
+    <geom name="floor" type="plane" size="40 40 0.1" material="floor_mat"
+          friction="0.15 0.005 0.0001"/>
+
+    <!-- Vertical wall at x = 0.5 (height matches ladder contact region) -->
+    <geom name="wall" type="box" size="0.04 0.55 0.55" pos="0.52 0 0.55"
+          material="wall_mat" friction="0.15 0.005 0.0001"/>
+
+    <!-- Ladder: foot at (-0.10, 0, 0.025), top touches wall at z ≈ 1.04.
+         Length 1.2 m, angle 60° above horizontal. -->
+    <body name="ladder" pos="-0.10 0 0.025">
+      <joint type="free"/>
+      <geom name="rail" type="capsule"
+            fromto="0 0 0  0.60 0 1.039"
+            size="0.022" mass="2.2" material="ladder_mat"
+            friction="0.15 0.005 0.0001"/>
+    </body>
+
+    <!-- Side view: pull back so ladder + wall fit at t=0 -->
+    <camera name="cam" pos="0.20 -5.5 0.45" fovy="48"
+            xyaxes="1 0 0  0 0.05 0.998"/>
+  </worldbody>
+</mujoco>

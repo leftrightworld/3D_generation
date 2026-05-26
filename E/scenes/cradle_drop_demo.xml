@@ -1,0 +1,105 @@
+<mujoco model="cradle_drop_demo">
+  <!-- Pendulum released from the left; block on a low ramp at the swing bottom.
+       Bob strikes while moving +x; block leaves along ramp tangent (+vx, +vz).
+       Render with --kinematic (see gen_cradle_drop_demo.py). -->
+  <compiler angle="radian" coordinate="local" autolimits="true"/>
+  <option timestep="0.001" gravity="0 0 -9.81" integrator="implicitfast"
+          impratio="3" cone="elliptic"/>
+
+  <visual>
+    <headlight diffuse="0 0 0" ambient="0.50 0.48 0.55" specular="0 0 0"/>
+    <rgba haze="0.94 0.91 0.90 1"/>
+    <global azimuth="120" elevation="-15" offwidth="1920" offheight="1080" fovy="40"/>
+    <quality shadowsize="8192" offsamples="8"/>
+    <map shadowclip="5" shadowscale="0.7"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="flat"
+             rgb1="0.74 0.68 0.86" rgb2="0.74 0.68 0.86"
+             width="512" height="512" mark="none" markrgb="0 0 0"/>
+    <material name="floor_mat" rgba="0.94 0.91 0.90 1" specular="0" shininess="0"/>
+    <material name="wood" rgba="0.93 0.82 0.58 1" specular="0.1" shininess="0.1"/>
+    <material name="ramp_mat" rgba="0.88 0.84 0.76 1" specular="0.05" shininess="0.05"/>
+    <material name="bob_yellow" rgba="0.96 0.83 0.36 1" specular="0.35" shininess="0.4"/>
+    <material name="block_blue" rgba="0.34 0.52 0.80 1" specular="0.35" shininess="0.4"/>
+    <material name="string_mat" rgba="0.28 0.25 0.22 1" specular="0" shininess="0"/>
+  </asset>
+
+  <default>
+    <geom friction="0.7 0.04 0.001" solref="0.002 1" solimp="0.97 0.99 0.001"/>
+  </default>
+
+  <worldbody>
+    <light pos="0 0 10" dir="-0.35 0.55 -1" directional="true" castshadow="true"
+           diffuse="0.85 0.82 0.78" specular="0.15 0.15 0.15"/>
+    <light pos="0 0 6" dir="0.45 -0.3 -1" directional="true" castshadow="false"
+           diffuse="0.30 0.30 0.36" specular="0 0 0"/>
+
+    <geom name="floor" type="plane" size="40 40 0.1" material="floor_mat"/>
+
+    <!-- L-stand: vertical post meets horizontal arm (no gap) -->
+    <geom type="box" size="0.045 0.045 0.5600"
+          pos="0 0.55 0.5600" material="wood"/>
+    <geom type="box" size="0.045 0.65 0.045"
+          pos="0 -0.10 1.1650" material="wood"/>
+    <!-- corner block where post top meets arm -->
+    <geom type="box" size="0.045 0.045 0.045"
+          pos="0 0.55 1.0750" material="wood"/>
+
+    <geom name="ramp_0" type="box" pos="-0.1100 -0.75 0.0030" size="0.011 0.030 0.0030" material="ramp_mat" contype="0" conaffinity="0"/>
+    <geom name="ramp_1" type="box" pos="-0.0887 -0.75 0.0030" size="0.011 0.030 0.0030" material="ramp_mat" contype="0" conaffinity="0"/>
+    <geom name="ramp_2" type="box" pos="-0.0675 -0.75 0.0051" size="0.011 0.030 0.0051" material="ramp_mat" contype="0" conaffinity="0"/>
+    <geom name="ramp_3" type="box" pos="-0.0462 -0.75 0.0085" size="0.011 0.030 0.0085" material="ramp_mat" contype="0" conaffinity="0"/>
+    <geom name="ramp_4" type="box" pos="-0.0250 -0.75 0.0125" size="0.011 0.030 0.0125" material="ramp_mat" contype="0" conaffinity="0"/>
+    <geom name="ramp_5" type="box" pos="-0.0038 -0.75 0.0165" size="0.011 0.030 0.0165" material="ramp_mat" contype="0" conaffinity="0"/>
+    <geom name="ramp_6" type="box" pos="0.0175 -0.75 0.0199" size="0.011 0.030 0.0199" material="ramp_mat" contype="0" conaffinity="0"/>
+    <geom name="ramp_7" type="box" pos="0.0387 -0.75 0.0222" size="0.011 0.030 0.0222" material="ramp_mat" contype="0" conaffinity="0"/>
+    <geom name="ramp_8" type="box" pos="0.0600 -0.75 0.0230" size="0.011 0.030 0.0230" material="ramp_mat" contype="0" conaffinity="0"/>
+
+    <geom name="arc_0" type="sphere" pos="-0.7068 -0.7500 0.4576" size="0.008" rgba="0.96 0.83 0.36 0.22" contype="0" conaffinity="0"/>
+    <geom name="arc_1" type="sphere" pos="-0.6232 -0.7500 0.3830" size="0.008" rgba="0.96 0.83 0.36 0.22" contype="0" conaffinity="0"/>
+    <geom name="arc_2" type="sphere" pos="-0.5318 -0.7500 0.3181" size="0.008" rgba="0.96 0.83 0.36 0.22" contype="0" conaffinity="0"/>
+    <geom name="arc_3" type="sphere" pos="-0.4337 -0.7500 0.2639" size="0.008" rgba="0.96 0.83 0.36 0.22" contype="0" conaffinity="0"/>
+    <geom name="arc_4" type="sphere" pos="-0.3301 -0.7500 0.2211" size="0.008" rgba="0.96 0.83 0.36 0.22" contype="0" conaffinity="0"/>
+    <geom name="arc_5" type="sphere" pos="-0.2224 -0.7500 0.1900" size="0.008" rgba="0.96 0.83 0.36 0.22" contype="0" conaffinity="0"/>
+    <geom name="arc_6" type="sphere" pos="-0.1119 -0.7500 0.1713" size="0.008" rgba="0.96 0.83 0.36 0.22" contype="0" conaffinity="0"/>
+    <geom name="arc_7" type="sphere" pos="0.0000 -0.7500 0.1650" size="0.008" rgba="0.96 0.83 0.36 0.22" contype="0" conaffinity="0"/>
+    <geom name="arc_8" type="sphere" pos="0.1119 -0.7500 0.1713" size="0.008" rgba="0.96 0.83 0.36 0.22" contype="0" conaffinity="0"/>
+    <geom name="arc_9" type="sphere" pos="0.2224 -0.7500 0.1900" size="0.008" rgba="0.96 0.83 0.36 0.22" contype="0" conaffinity="0"/>
+    <geom name="arc_10" type="sphere" pos="0.3301 -0.7500 0.2211" size="0.008" rgba="0.96 0.83 0.36 0.22" contype="0" conaffinity="0"/>
+    <geom name="arc_11" type="sphere" pos="0.4337 -0.7500 0.2639" size="0.008" rgba="0.96 0.83 0.36 0.22" contype="0" conaffinity="0"/>
+    <geom name="arc_12" type="sphere" pos="0.5318 -0.7500 0.3181" size="0.008" rgba="0.96 0.83 0.36 0.22" contype="0" conaffinity="0"/>
+    <geom name="arc_13" type="sphere" pos="0.6232 -0.7500 0.3830" size="0.008" rgba="0.96 0.83 0.36 0.22" contype="0" conaffinity="0"/>
+    <geom name="arc_14" type="sphere" pos="0.7068 -0.7500 0.4576" size="0.008" rgba="0.96 0.83 0.36 0.22" contype="0" conaffinity="0"/>
+    <geom name="parab_1" type="sphere" pos="-0.2586 -0.7500 0.2104" size="0.007" rgba="0.34 0.52 0.80 0.28" contype="0" conaffinity="0"/>
+    <geom name="parab_2" type="sphere" pos="-0.4893 -0.7500 0.3406" size="0.007" rgba="0.34 0.52 0.80 0.28" contype="0" conaffinity="0"/>
+    <geom name="parab_3" type="sphere" pos="-0.7199 -0.7500 0.4355" size="0.007" rgba="0.34 0.52 0.80 0.28" contype="0" conaffinity="0"/>
+    <geom name="parab_4" type="sphere" pos="-0.9506 -0.7500 0.4951" size="0.007" rgba="0.34 0.52 0.80 0.28" contype="0" conaffinity="0"/>
+    <geom name="parab_5" type="sphere" pos="-1.1812 -0.7500 0.5194" size="0.007" rgba="0.34 0.52 0.80 0.28" contype="0" conaffinity="0"/>
+    <geom name="parab_6" type="sphere" pos="-1.4118 -0.7500 0.5084" size="0.007" rgba="0.34 0.52 0.80 0.28" contype="0" conaffinity="0"/>
+    <geom name="parab_7" type="sphere" pos="-1.6425 -0.7500 0.4620" size="0.007" rgba="0.34 0.52 0.80 0.28" contype="0" conaffinity="0"/>
+    <geom name="parab_8" type="sphere" pos="-1.8731 -0.7500 0.3804" size="0.007" rgba="0.34 0.52 0.80 0.28" contype="0" conaffinity="0"/>
+    <geom name="parab_9" type="sphere" pos="-2.1038 -0.7500 0.2634" size="0.007" rgba="0.34 0.52 0.80 0.28" contype="0" conaffinity="0"/>
+    <geom name="parab_10" type="sphere" pos="-2.3344 -0.7500 0.1111" size="0.007" rgba="0.34 0.52 0.80 0.28" contype="0" conaffinity="0"/>
+    <geom name="impact_glow" type="sphere" pos="-0.0280 -0.7500 0.0448" size="0.045" rgba="0.98 0.90 0.55 0.14" contype="0" conaffinity="0"/>
+
+    <body name="pendulum" pos="0.0 -0.75 1.165">
+      <joint name="hinge" type="hinge" axis="0 1 0" damping="0.012"/>
+      <geom name="string" type="capsule"
+            fromto="0 0 0  0 0 -1.0" size="0.005"
+            material="string_mat" contype="0" conaffinity="0"/>
+      <geom name="bob" type="sphere" pos="0 0 -1.0" size="0.115"
+            material="bob_yellow" mass="0.50"/>
+    </body>
+
+    <body name="top_block" pos="-0.0280 -0.7500 0.0448">
+      <freejoint name="block_free"/>
+      <geom name="block" type="box" size="0.035 0.035 0.025"
+            material="block_blue" mass="0.05"/>
+    </body>
+
+    <camera name="cam" pos="2.6 -2.9 1.05"
+            xyaxes="0.74 0.67 0   -0.12 0.13 0.98"/>
+  </worldbody>
+</mujoco>
