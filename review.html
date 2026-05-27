@@ -58,9 +58,9 @@
 
 <div class="auth" id="authBar">
   <span id="loggedOut">
-    <input type="password" id="token" placeholder="粘贴你的 GitHub fine-grained token (ghp_/github_pat_…)">
+    <input type="password" id="token" placeholder="粘贴你的 GitHub token (ghp_… / github_pat_…)">
     <button class="btn" id="loginBtn">登录</button>
-    <a id="tokenLink" href="https://github.com/settings/personal-access-tokens/new" target="_blank">→ 创建 token（仅授予本仓库 Contents 读写）</a>
+    <a id="tokenLink" href="https://github.com/settings/tokens/new?scopes=repo&description=3D_generation_review" target="_blank">→ 创建 token（classic，勾选 repo）</a>
   </span>
   <span id="loggedIn" style="display:none;">
     <span class="who">已登录：<b id="meLogin"></b></span>
@@ -68,7 +68,7 @@
     <span class="sync" id="syncState">·</span>
   </span>
 </div>
-<div class="hint" id="authHint">未登录时为只读：可看视频、可看大家已有的标注，但不能保存。Token 只存在你本机浏览器，绝不写入页面或仓库代码。</div>
+<div class="hint" id="authHint">未登录=只读（可看视频与所有人已有标注，不能保存）。登录后标注实时提交到仓库。⚠️ 你需先被仓库主加为协作者(write)，并用 <b>classic token + 勾选 repo</b> 权限（本仓库属个人账号，fine-grained token 仅仓库主本人可用）。Token 只存你本机浏览器，绝不写入页面或仓库。</div>
 
 <div class="controls">
   <input type="text" id="search" placeholder="搜索任务名或描述…">
@@ -277,8 +277,6 @@ $("exportCsv").addEventListener("click",()=>{
 });
 function csvCell(s){s=String(s==null?"":s);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
 
-// token link preset (repo-scoped page differs by account; generic new-token page)
-$("tokenLink").href="https://github.com/settings/personal-access-tokens/new";
 
 // ---------- boot ----------
 (async function(){
