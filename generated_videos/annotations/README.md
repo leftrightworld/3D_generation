@@ -1,6 +1,6 @@
 # annotations/
 
-每个评审人的标注存为 `annotations/<github-login>.json`，由评审页面（`/review.html`）在登录后自动读写。
+每个评审人的标注存为 `generated_videos/annotations/<github-login>.json`，由评审页面（同目录的 `generated_videos/review.html`）在登录后自动读写。
 
 格式：
 ```json
