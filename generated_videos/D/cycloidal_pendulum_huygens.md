@@ -1,0 +1,6 @@
+#### `cycloidal_pendulum_huygens` — Constraint / tautochrone
+**Physics:** A pendulum's string wrapping around two cycloid-shaped "cheeks" forces the bob to trace a cycloid path. The resulting motion is exactly isochronous: period is independent of amplitude (unlike a normal pendulum).
+**Setup:** Pivot at world (0, 0, 1.0). Two cycloid arcs (the "cheeks") flank the pivot, one on each side. Each cheek is the EVOLUTE of the path-cycloid (per Huygens). Use the parametric form `x = ±R·(θ - sin θ), z = 1.0 - R·(1 - cos θ)` for θ ∈ [0, π/2]; with R=0.20 m. Approximate each cheek with 12 short box-segments. The pendulum: massless string (tendon) of length π·R from the pivot to a bob (sphere R=0.015 m, M=0.05 kg). As the bob swings, the string wraps around the cheeks, effectively shortening — this forces the bob's path to be a cycloid.
+**Motion:** Bob swings back and forth tracing a cycloid arc (visibly different from a circular pendulum arc). Period ≈ 4π·sqrt(R/g) ≈ 0.9 s, INDEPENDENT of swing amplitude.
+**Template:** `pendulum.xml` (pivot + bob) + `gen_brachistochrone.py` (cycloid generator).
+**Hints:** Use a tendon for the string — tendons wrap around obstacles naturally. The cheeks need contact with the tendon. Programmatic generator. Render 4 s (~4 cycles). Side view, pos (0, -1.6, 0.8), fovy 40.

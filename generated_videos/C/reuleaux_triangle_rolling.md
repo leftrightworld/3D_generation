@@ -1,0 +1,6 @@
+#### `reuleaux_triangle_rolling` — Rotation / geometry
+**Physics:** A Reuleaux triangle (constant-width non-circular shape) rolls along a flat surface keeping the TOP face at a constant height — but the centroid of the shape bobs up and down by ~6.7% of the width as it rolls.
+**Setup:** Reuleaux triangle of side L=0.10 m, thickness (z-extent) 0.05 m. Construct programmatically: for each of 3 vertices (at angles 0°, 120°, 240° on a circle of radius L/sqrt(3)), generate an arc of radius L centered on the OPPOSITE vertex. Approximate each arc with 8 small `<geom type="box">` segments. The triangle is given an initial linear velocity (vx=0.3 m/s) and matching rolling angular velocity (ω_y = vx / (centroid_height)).
+**Motion:** Triangle rolls; the upper face holds a near-constant height (so a board on top wouldn't tilt). The centroid (and thus a marker glued to the centroid) bobs visibly up and down with 3× the rolling angular period.
+**Template:** Programmatic gen (`gen_reuleaux.py`). Reuse rolling pattern from `marble.xml`.
+**Hints:** ~24 box geoms total (3 arcs × 8). Friction tuned for rolling without slip: `friction="0.6 0.005 0.0001"`. Side view, camera pos (0, -1.5, 0.15), fovy 40. Render 4 s.

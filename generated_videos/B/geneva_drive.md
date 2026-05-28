@@ -1,0 +1,6 @@
+#### `geneva_drive` — Mechanism
+**Physics:** Converts continuous rotation into intermittent indexed rotation — a driver wheel with a single pin engages a slotted driven wheel, causing the driven wheel to step by 360°/N per pin engagement.
+**Setup:** Driving wheel: cylinder R=0.08 m, thickness 0.02 m, with a small box pin of half-extent (0.005, 0.005, 0.015) at offset 0.04 m from center. Driven wheel: cylinder R=0.10 m, thickness 0.02 m, with 4 radial slots cut at 90° spacing. Each slot is a 0.012 m wide × 0.04 m deep rectangular channel approximated by box geoms forming the slot walls. The two wheel centers are 0.13 m apart on the same y-line so the pin clears the driven wheel's body but enters the slots. Driver gets init-qvel ω=2 rad/s on its hinge.
+**Motion:** Driver rotates continuously; driven wheel sits still for ~270° of driver rotation, then jumps forward by 90° in ~90° of driver rotation, then sits still again. Render shows 2-3 indexing steps.
+**Template:** Programmatic gen `gen_geneva_drive.py`. Closest existing: `dominoes.xml` (for chain reaction style).
+**Hints:** Slot width must be slightly larger than pin width (1.5x for clean engagement). Damping on driven wheel hinge (0.05) to prevent oscillation. Friction off between pin and slot walls. Render 5 s. Top-down camera, pos (0.06, 0, 0.7), looking straight down, xyaxes="1 0 0  0 1 0".
